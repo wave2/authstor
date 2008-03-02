@@ -1,0 +1,61 @@
+[% PROCESS head.tt2 -%]
+<body class='yui-skin-sam'>
+[% PROCESS yuiCommon.tt2 -%]
+[% PROCESS yuiTreeView.tt2 -%]
+[% PROCESS yuiDataTable.tt2 -%]
+[% PROCESS header.tt2 %]
+<div id='container'>
+<div id='sidebar'>
+  <div id='menubarDiv'></div>
+  <div id='treeDiv'></div>
+</div>
+<div id='content' class='yui-skin-sam'>
+<h1>[% search_title %]</h1>
+<div id='searchResults'>
+<table id='searchResultsTable'>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Username</th>
+      <th>Password</th>
+      <th>URI</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    [% WHILE (searchResult=search_results.next) -%]
+  <tr>
+    <td><a href='[% base %]auth[% searchResult.auth_id %]'>[% searchResult.name %]</a></td>
+    <td>[% searchResult.username %]</td>
+    <td>[% searchResult.password %]</td>
+    <td>[% searchResult.uri %]</td>
+    <td>[% searchResult.description %]</td>
+  </tr>
+    [% END %]
+  </tbody>
+</table>
+</div>
+<script type='text/javascript'>
+  var dataSource = new YAHOO.util.DataSource(YAHOO.util.Dom.get("searchResultsTable"));
+  dataSource.responseType = YAHOO.util.DataSource.TYPE_HTMLTABLE;
+  dataSource.responseSchema = {
+    fields: [{key:"Name"},{key:"Username"},{key:"Password"},{key:"URI"},{key:"Description"}]
+  };
+
+  var columnDefs = [
+    {key:"Name"},
+    {key:"Username"},
+    {key:"Password"},
+    {key:"URI"},
+    {key:"Description"}
+  ];
+
+  var dataTable = new YAHOO.widget.DataTable("searchResults", columnDefs, dataSource, {});
+</script>
+</div>
+</div>
+[% WHILE (searchTest=test.next) -%]
+[% searchTest %]
+[% END %]
+<div id='footer'></div>
+[% PROCESS footer.tt2 -%]

@@ -1,0 +1,291 @@
+<!-- TreeView -->
+<link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/2.4.1/build/treeview/assets/skins/sam/treeview.css">
+<link rel="stylesheet" href="/tree.css" type="text/css" />
+
+<!-- Source File -->
+<script src = "http://yui.yahooapis.com/2.4.1/build/treeview/treeview-min.js" ></script>
+
+<script type="text/javascript">
+YAHOO.util.Event.onDOMReady(function () {
+
+    var aItemData = [
+
+        { text: "File", submenu: {  id: "filemenu", itemdata: [
+                { text: "New Auth", helptext: "Ctrl + N", onclick:  { fn: addAuth } },
+                { text: "Logout", helptext: "Ctrl + O", onclick:  { fn: logout } }
+            ] }
+        },
+        
+        { text: "Edit", submenu: { id: "editmenu", itemdata: [
+
+                [ 
+                    { text: "Undo", helptext: "Ctrl + Z" },
+                    { text: "Redo", helptext: "Ctrl + Y" }
+                ],
+                
+                [
+                    { text: "Copy", helptext: "Ctrl + C" },
+                    { text: "Delete", helptext: "Del" }
+                ]
+            ] }
+        },
+
+        { text: "Help", submenu: {  id: "helpmenu", itemdata: [
+                { text: "AuthStor Help", helptext: "Ctrl + H" },
+                { text: "About" },
+            ] }
+        },
+    ];
+
+    // Instantiate a MenuBar, passing in the id of the element to be created
+    var oMenuBar = new YAHOO.widget.MenuBar("SidebarMenu");
+    
+    // Add items to the MenuBar instance
+    oMenuBar.addItems(aItemData);
+
+    // Render the MenuBar instance
+    oMenuBar.render('menubarDiv');
+    
+//global variable to allow console inspection of tree:
+var tree;
+
+   var oTextNodeMap = {};
+
+    //function to initialize the tree:
+    function treeInit() {
+
+        //instantiate the tree:
+        tree = new YAHOO.widget.TreeView("treeDiv");
+        //turn dynamic loading on for entire tree: 
+        var myobj = { label: "", id:"" };
+
+        [% IF group.id == 1 %]
+        myobj = { id: [% group.id %], html: '[% group.name %]', container: true };
+        var groupNode[% group.id %] = new YAHOO.widget.HTMLNode(myobj, tree.getRoot(), false, false);
+        groupNode[% group.id %].contentStyle = "ygtvroot";
+        groupNode[% group.id %].depth = -1;
+        groupNode[% group.id %].setDynamicLoad(loadNodeData, 1);
+        oTextNodeMap[groupNode[% group.id %].contentElId] = groupNode[% group.id %];
+        [% ELSE %]
+        myobj = { id: [% group.id %], label: '[% group.name %]', container: true };
+        var groupNode[% group.id %] = new YAHOO.widget.TextNode(myobj, tree.getRoot(), false);
+        groupNode[% group.id %].setDynamicLoad(loadNodeData, 1);
+        oTextNodeMap[groupNode[% group.id %].labelElId] = groupNode[% group.id %];
+        [% END %]
+
+        //Fire an event when the label is clicked: 
+        tree.subscribe("labelClick", function(node) { 
+          if (node.data.container == false){
+            window.location.href = "[% base %]auth" + node.data.id;
+          }
+        }); 
+        tree.draw();
+        //Expand to node
+        [% IF expandGroup %]
+        groupNode[% expandGroup %].expand();
+        [% END %]
+    }
+
+        //Add a window onload handler to build the tree when the load
+        //event fires.
+    YAHOO.util.Event.addListener(window, "load", treeInit);
+
+var oCurrentTextNode = null; 
+
+var deleteGroupDialog = new YAHOO.widget.SimpleDialog("deleteGroupDialog", {
+  width: "20em",
+  effect:{effect:YAHOO.widget.ContainerEffect.FADE,
+  duration:0.25},
+  fixedcenter:true,
+  modal:true,
+  visible:false,
+draggable:false });
+
+  var handleYes = function() {
+   //user confirms the deletion of this item;
+   //this method would perform that deletion;
+   //when ready, hide the SimpleDialog:
+   window.location.href = "[% base %]group" + oTextNodeMap[oCurrentTextNode.id].data.id + "/delete";
+   this.hide();
+  }
+
+  var handleNo = function() {
+   //user cancels item deletion; this method
+   //would handle the cancellation of the
+   //process.
+   //when ready, hide the SimpleDialog:
+   this.hide();
+  }
+
+var myButtons = [ { text:"Yes",
+  handler:handleYes },
+  { text:"Cancel",
+  handler:handleNo,
+  isDefault:true } ];
+
+deleteGroupDialog.setHeader("Delete Group?");
+deleteGroupDialog.cfg.queueProperty("buttons", myButtons);
+deleteGroupDialog.render(document.body);
+
+function addGroup() {
+  window.location.href = "[% base %]group/add?parent=" + oTextNodeMap[oCurrentTextNode.id].data.id;
+}
+
+function deleteGroup() {
+  deleteGroupDialog.setHeader("Delete " + oTextNodeMap[oCurrentTextNode.id].data.label + "?");
+  deleteGroupDialog.setBody("Are you sure you want to delete the group " + oTextNodeMap[oCurrentTextNode.id].data.label + "?");
+  deleteGroupDialog.cfg.setProperty("icon",YAHOO.widget.SimpleDialog.ICON_WARN);
+  deleteGroupDialog.show();
+}
+
+function editGroup() {
+  window.location.href = "[% base %]group" + oTextNodeMap[oCurrentTextNode.id].data.id + "/edit";
+}
+
+function addAuth() {
+    window.location.href = "[% base %]auth/add?group_id=" + oTextNodeMap[oCurrentTextNode.id].data.id;
+}
+
+function deleteAuth() {
+    window.location.href = "[% base %]auth" + oTextNodeMap[oCurrentTextNode.id].data.id + "/delete";
+}
+
+function editAuth() {
+    window.location.href = "[% base %]auth" + oTextNodeMap[oCurrentTextNode.id].data.id + "/edit";
+}
+
+function logout() {
+    window.location.href = "[% base %]logout";
+}
+
+function onTriggerContextMenu(p_oEvent) {
+
+  oCurrentTextNode = this.contextEventTarget;
+  this.clearContent();
+
+  if (oTextNodeMap[oCurrentTextNode.id].data.container){
+    this.itemData = [ { text: "Add Group", onclick: { fn: addGroup } },
+                      { text: "Edit Group", onclick: { fn: editGroup } },
+                      { text: "Delete Group", onclick: { fn: deleteGroup } },
+                      { text: "Add Auth", onclick: { fn: addAuth } } ];
+  }else{
+    this.itemData = [ { text: "Delete Auth", onclick: { fn: deleteAuth } },
+                      { text: "Edit Auth", onclick: { fn: editAuth } } ];
+  }
+}
+
+
+/*
+     Instantiate a ContextMenu:  The first argument passed to 
+     the constructor is the id of the element to be created; the 
+     second is an object literal of configuration properties.
+*/
+
+var treeViewContextMenu = new YAHOO.widget.ContextMenu("treeViewContextMenu", {
+                                                trigger: "treeDiv",
+                                                lazyload: true, 
+                                                itemdata: [
+                                                ] });
+
+
+/*
+     Subscribe to the "contextmenu" event for the element(s)
+     specified as the "trigger" for the ContextMenu instance.
+*/
+
+treeViewContextMenu.subscribe("triggerContextMenu", onTriggerContextMenu);
+
+function loadNodeData(node, fnLoadComplete)  {
+
+        //We'll create child nodes based on what we get back when we
+        //use Connection Manager to pass the text label of the 
+        //expanding node to the Yahoo!
+        //Search "related suggestions" API.  Here, we're at the 
+        //first part of the request -- we'll make the request to the
+        //server.  In our Connection Manager success handler, we'll build our new children
+        //and then return fnLoadComplete back to the tree.
+
+        //prepare URL for XHR request:
+        var sUrl = "[% base %]children" + node.data.id;
+
+        //prepare our callback object
+        var callback = {
+
+        //if our XHR call is successful, we want to make use
+        //of the returned data and create child nodes.
+        success: function(oResponse) {
+
+            //there is only one result; comes as string:
+            var oResults = eval("(" + oResponse.responseText + ")"); 
+
+            //Groups
+            if((oResults.Nodes) && (oResults.Nodes.length)) { 
+                //Result is an array if more than one result, string otherwise 
+                if(YAHOO.lang.isArray(oResults.Nodes)) { 
+                    for (var i=0, j=oResults.Nodes.length; i<j; i++) { 
+                        var myobj = { label: oResults.Nodes[i][0], id: oResults.Nodes[i][1], container: true };
+                        var tempNode = new YAHOO.widget.TextNode(myobj, node, false);
+                        tempNode.setDynamicLoad(loadNodeData, 1);
+                        oTextNodeMap[tempNode.labelElId] = tempNode;
+                    } 
+                } else { 
+                    //there is only one result; comes as string: 
+                    var tempNode = new YAHOO.widget.TextNode(oResults.Node, node, false);
+                    tempNode.setDynamicLoad(loadNodeData, 1);
+                    oTextNodeMap[tempNode.labelElId] = tempNode;
+                } 
+            } 
+            //Auths
+            if((oResults.Auths) && (oResults.Auths.length)) {
+                //Result is an array if more than one result, string otherwise
+                if(YAHOO.lang.isArray(oResults.Auths)) {
+                    for (var i=0, j=oResults.Auths.length; i<j; i++) {
+                        var myobj = { label: oResults.Auths[i][0], id: oResults.Auths[i][1], container: false };
+                        var tempNode = new YAHOO.widget.TextNode(myobj, node, false);
+                        tempNode.labelStyle = "authstor";
+                        oTextNodeMap[tempNode.labelElId] = tempNode;
+                    }
+                } else {
+                    //there is only one result; comes as string:
+                    var tempNode = new YAHOO.widget.TextNode(oResults.Node, node, false);
+                    tempNode.labelStyle = "authstor";
+                    oTextNodeMap[tempNode.labelElId] = tempNode;
+                }
+            } 
+
+            //When we're done creating child nodes, we execute the node's
+            //loadComplete callback method which comes in via the argument
+            //in the response object (we could also access it at node.loadComplete,
+            //if necessary):
+            oResponse.argument.fnLoadComplete();
+       },
+
+       //if our XHR call is not successful, we want to
+       //fire the TreeView callback and let the Tree
+       //proceed with its business.
+       failure: function(oResponse) {
+             oResponse.argument.fnLoadComplete();
+       },
+
+       //our handlers for the XHR response will need the same
+       //argument information we got to loadNodeData, so
+       //we'll pass those along:
+       argument: {
+             "node": node,
+             "fnLoadComplete": fnLoadComplete
+       },
+
+       //timeout -- if more than 7 seconds go by, we'll abort
+       //the transaction and assume there are no children:
+       timeout: 7000
+       };
+
+        //With our callback object ready, it's now time to 
+        //make our XHR call using Connection Manager's
+        //asyncRequest method:
+        YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+}
+
+});
+
+</script>

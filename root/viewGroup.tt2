@@ -1,0 +1,61 @@
+[% PROCESS head.tt2 -%]
+<body class='yui-skin-sam'>
+[% PROCESS yuiCommon.tt2 -%]
+[% PROCESS yuiTreeView.tt2 -%]
+[% PROCESS yuiButton.tt2 -%]
+[% PROCESS header.tt2 -%]
+<div id='container'>
+<div id='sidebar'>
+  <div id='menubarDiv'></div>
+  <div id='treeDiv'></div>
+</div>
+<div id='content'>
+<h1>[% group_view.name %]</h1>
+<h2>Description</h2>
+<p>[% group_view.description %]</p>
+<hr />
+<input type='button' id="editButton" name="editButton" value="Edit">
+<input type='button' id="deleteButton" name="deleteButton" value="Delete">
+<script type='text/javascript'>
+  var editButton = new YAHOO.widget.Button("editButton");
+  editButton.addListener("click",function(){window.location.href = "http://www.authstor.org/group[% group_view.group_id %]/edit"});
+  var deleteButton = new YAHOO.widget.Button("deleteButton"); 
+
+  var deleteDialog = new YAHOO.widget.SimpleDialog("deleteDialog", { 
+    width: "20em", 
+    effect:{effect:YAHOO.widget.ContainerEffect.FADE,
+    duration:0.25}, 
+    fixedcenter:true,
+    modal:true,
+    visible:false,
+  draggable:false });
+  deleteDialog.setHeader("Delete Group [% group_view.name %]?");
+  deleteDialog.setBody("Are you sure you want to delete the group [% group_view.name %]?");
+  deleteDialog.cfg.setProperty("icon",YAHOO.widget.SimpleDialog.ICON_WARN);
+var handleYes = function() {
+ //user confirms the deletion of this item;
+ //this method would perform that deletion;
+ //when ready, hide the SimpleDialog:
+ this.hide();
+}
+var handleNo = function() {
+ //user cancels item deletion; this method
+ //would handle the cancellation of the
+ //process.
+ //when ready, hide the SimpleDialog:
+ this.hide();
+}
+var myButtons = [ { text:"Yes", 
+					handler:handleYes },
+				  { text:"Cancel", 
+				  	handler:handleNo,
+					isDefault:true } ];
+deleteDialog.cfg.queueProperty("buttons", myButtons);
+deleteDialog.render(document.body);
+  YAHOO.util.Event.addListener("deleteButton", "click", deleteDialog.show, deleteDialog, true);
+</script>
+</div>
+</div>
+</body>
+<div id='footer'></div>
+[% PROCESS footer.tt2 -%]

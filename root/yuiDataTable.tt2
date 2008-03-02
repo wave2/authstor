@@ -1,0 +1,11 @@
+<!--CSS file (default YUI Sam Skin) -->
+<link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/2.4.1/build/datatable/assets/skins/sam/datatable.css">
+
+<!-- Dependencies -->
+<script type="text/javascript" src="http://yui.yahooapis.com/2.4.1/build/datasource/datasource-beta-min.js"></script>
+
+<!-- OPTIONAL: Drag Drop (enables resizeable columns) -->
+<script type="text/javascript" src="http://yui.yahooapis.com/2.4.1/build/dragdrop/dragdrop-min.js"></script>
+
+<!-- Source files -->
+<script type="text/javascript" src="http://yui.yahooapis.com/2.4.1/build/datatable/datatable-beta-min.js"></script>

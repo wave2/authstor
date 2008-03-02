@@ -1,0 +1,271 @@
+html {
+  height: 100%;
+}
+
+body {
+    border: none;
+    background-color:#222D2D;
+    padding: 10px;
+    min-width: 640px;
+}
+
+a.delete:hover {
+	background: #c00;
+	color: #fff;
+}
+
+td {
+  color: #fff;
+}
+
+textarea, input, select {
+	background: #f4f4f4;
+	border: 1px solid #b2b2b2;
+	color: #000;
+	font: 13px Verdana, Arial, Helvetica, sans-serif;
+	margin: 1px;
+	padding: 3px;
+}
+
+#mytags {
+  color: #fff;
+}
+
+#login {
+	position: relative;
+	background: url('static/images/login_bkg_tile.png') no-repeat top center;
+	color: #fff;
+	margin: 5em auto 1em;
+	padding: 20px 0 0;
+	width: 425px;
+	_width: 390px;
+}
+
+#login form {
+	background: url('static/images/login_bkg_bottom.png') no-repeat bottom center;
+	padding: 0 50px 25px;
+	_width: 325px;
+	_margin: 0 auto;
+}
+
+#login #login_error {
+	background: #666666;
+	border: 1px solid #fff;
+	color: #fff;
+	font-size: 11px;
+	font-weight: bold;
+	padding: .6em;
+	width: 310px;
+	margin: 0 50px;
+	text-align: center;
+}
+
+#login p { 
+	font-size: 12px;
+}
+
+#login p.message { 
+	width: 310px;
+	margin: 0 auto 1em;
+}
+
+#login #login_error a {
+	color: #ebcd4e;
+	border-color: #ebcd4e;
+}
+
+#login #send {
+	color: #fff;
+	text-align: left;
+	font-weight: normal;
+	font-size: 1.1em;
+	_width: 325px;
+	_margin: 0 auto 15px;
+}
+
+#login h1 a {
+	margin: 0 auto;
+	height: 88px;
+	width: 320px;
+	display: block;
+	border-bottom: none;
+	text-indent: -9999px;
+}
+
+#login .message {
+	font-size: 10pt;
+	text-align: center;
+}
+
+#login .register {
+	font-size: 20px;
+}
+
+#login input {
+	padding: 4px;
+}
+
+.login ul, #protected #login .bottom {
+	list-style: none;
+	width: 325px;
+	margin: 0 auto;
+	padding: 0;
+	line-height: 1.2;
+}
+
+.login ul li {
+	font-size: 11px;
+}
+
+.login ul li a {
+	color: #ffffff;
+	border: none;
+}
+
+#login ul li a:hover {
+	color: #fff;
+}
+
+#login .input {
+	font-size: 1.8em;
+	margin-top: 3px;
+	width: 97%;
+}
+
+#login p label { 
+	font-size: 11px;
+}
+
+#login #submit {
+	margin: 0;
+	font-size: 15px;
+}
+
+.plugins p {
+}
+
+#login .fullwidth {
+	width: 320px;
+}
+
+.submit input, .submit input:focus, .button, .button:focus {
+	background: url( static/images/fade-butt.png );
+	border: 3px double #999;
+	border-left-color: #ccc;
+	border-top-color: #ccc;
+	color: #333;
+	padding: 0.25em;
+}
+
+.submit input:active, .button:active {
+	background: #f4f4f4;
+	border: 3px double #ccc;
+	border-left-color: #999;
+	border-top-color: #999;
+}
+
+.submit, .editform th, #postcustomsubmit {
+	text-align: right;
+}
+
+/* Treeview */
+#treewrapper {background: #fff; position:relative;}
+#treeDiv {position:relative; height:400px; width:210px; background: #fff; padding:1em;}
+#treeDiv a {
+    border-bottom: none;
+    color: #000000;
+}
+.root { display:block; padding-left: 20px; background: transparent url(static/images/icons.png) 0 0px no-repeat; }
+.authstor { display:block; padding-left: 20px; background: transparent url(static/images/icons.png) 0 -20px no-repeat; }
+.group-expand { display:block; padding-left: 20px; background: transparent url(static/images/icons.png) 0 -39px no-repeat; }
+.icon-gen { display:block; padding-left: 20px; background: transparent url(static/images/icons.png) 0 -108px no-repeat; }
+.icon-doc { display:block; padding-left: 20px; background: transparent url(static/images/icons.png) 0 -144px no-repeat; }
+.icon-jar { display:block; padding-left: 20px; background: transparent url(static/images/icons.png) 0 -180px no-repeat; }
+.icon-zip { display:block; padding-left: 20px; background: transparent url(static/images/icons.png) 0 -216px no-repeat; }
+
+#header {
+    height: 60px;
+}
+
+#logo {
+    float: left;
+}
+
+#logo a img{
+  border: none;
+}
+
+#search {
+    color: #ffffff;
+    float: right;
+    font: 1.2em Tahoma, sans-serif;
+}
+
+#container {
+    width:expression(document.body.clientWidth < 782? "780px" : document.body.clientWidth > 1262? "1260px" : "auto");
+}
+
+#sidebar {
+    float: left;
+}
+
+#content {
+    padding-left: 260px;
+}
+
+#content h1 {
+    border-bottom: 2px solid #fff;
+    color: #ffffff;
+    font: 1.8em Tahoma, sans-serif;
+}
+
+#content h2 {
+    border-bottom: 2px solid #fff;
+    color: #ffffff;
+    font: 1.4em Tahoma, sans-serif;
+}
+
+#content p {
+    font: 1.2em/1.8em Tahoma, sans-serif;
+    color: #fff;
+    margin: 0px;
+    line-height: 1.4em;
+}
+
+/* Password Strength */
+.pwstrength {
+    font: 0.8em/1.8em Tahoma, sans-serif;
+    color: #fff;
+    width: 200px; 
+    height: 18px;
+}
+
+#htmltagcloud {
+  line-height: 1; 
+}
+
+#htmltagcloud {
+  color: #fff;
+}
+span.tagcloud0 { font-size: 12px;}
+span.tagcloud0 a {text-decoration: none; color: #fff;}
+span.tagcloud1 { font-size: 13px;}
+span.tagcloud1 a {text-decoration: none; color: #fff;}
+span.tagcloud2 { font-size: 14px;}
+span.tagcloud2 a {text-decoration: none; color: #fff;}
+span.tagcloud3 { font-size: 15px;}
+span.tagcloud3 a {text-decoration: none; color: #fff;}
+span.tagcloud4 { font-size: 16px;}
+span.tagcloud4 a {text-decoration: none; color: #fff;}
+span.tagcloud5 { font-size: 17px;}
+span.tagcloud5 a {text-decoration: none; color: #fff;}
+
+#footer {
+  width: 100%;
+  text-align: center;
+  clear: both;
+}
+
+#footer a img {
+  border: none;
+}

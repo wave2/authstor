@@ -1,0 +1,33 @@
+[% PROCESS head.tt2 -%]
+[% PROCESS yuiCommon.tt2 -%]
+[% PROCESS yuiButton.tt2 -%]
+
+[% PROCESS header.tt2 %]
+<div id='container'>
+<div id='sidebar'><div id='treeDiv'></div></div>
+<div id='content' class='yui-skin-sam'>
+<h1>[% user_view.first_name %] [% user_view.last_name %]</h1>
+<table>
+<tr><td><p>First Name:</p></td><td><input type="text" name="firstname" id="firstname" size='22' maxlength='100' value='[% user_view.first_name %]'/></td></tr>
+<tr><td><p>Last Name:</p></td><td><input type="text" name="lastname" id="lastname" size='22' maxlength='100' value='[% user_view.last_name %]'/></td></tr>
+</table>
+<h2>Authentication</h2>
+<table>
+<tr><td><p>Username:</p></td><td><input type="text" name="username" id="username" size='22' maxlength='100' value='[% user_view.username %]'/></td></tr>
+<tr><td><p>Password:</p></td><td><input type="text" name="password" id="password" size='22' maxlength='100' value='[% user_view.password %]'/></td></tr>
+</table>
+<hr />
+<p>
+<span id="mycheckbox" class="yui-button yui-push-button"> 
+    <span class="first-child"> 
+        <button type="button">Create Password</button> 
+    </span> 
+</span> 
+<script type='text/javascript'>
+var oPushButton4 = new YAHOO.widget.Button("mycheckbox");
+</script>
+</p>
+</div>
+</div>
+<div id='footer'></div>
+[% PROCESS footer.tt2 -%]

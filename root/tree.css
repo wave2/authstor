@@ -1,0 +1,58 @@
+/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
+
+/* first or middle sibling, expandable */
+.ygtvroot { color:black; padding-left:24px; background: url(static/images/folders/root.gif) 0 0 no-repeat; width:22px; height:22px; cursor:pointer }
+
+/* first or middle sibling, no children */
+.ygtvtn { background: url(static/images/folders/tn.gif) 0 0 no-repeat; width:17px; height:22px; }
+
+/* first or middle sibling, collapsable */
+.ygtvtm { background: url(static/images/folders/tm.gif) 0 0 no-repeat; width:34px; height:22px; cursor:pointer }
+
+/* first or middle sibling, collapsable, hover */
+.ygtvtmh { background: url(static/images/folders/tmh.gif) 0 0 no-repeat; width:34px; height:22px; cursor:pointer }
+
+/* first or middle sibling, expandable */
+.ygtvtp { background: url(static/images/folders/tp.gif) 0 0 no-repeat; width:34px; height:22px; cursor:pointer }
+
+/* first or middle sibling, expandable, hover */
+.ygtvtph { background: url(static/images/folders/tph.gif) 0 0 no-repeat; width:34px; height:22px; cursor:pointer }
+
+/* last sibling, no children */
+.ygtvln { background: url(static/images/folders/ln.gif) 0 0 no-repeat; width:17px; height:22px; }
+
+/* Last sibling, collapsable */
+.ygtvlm { background: url(static/images/folders/lm.gif) 0 0 no-repeat; width:34px; height:22px; cursor:pointer }
+
+/* Last sibling, collapsable, hover */
+.ygtvlmh { background: url(static/images/folders/lmh.gif) 0 0 no-repeat; width:34px; height:22px; cursor:pointer }
+
+/* Last sibling, expandable */
+.ygtvlp { background: url(static/images/folders/lp.gif) 0 0 no-repeat; width:34px; height:22px; cursor:pointer }
+
+/* Last sibling, expandable, hover */
+.ygtvlph { background: url(static/images/folders/lph.gif) 0 0 no-repeat; width:34px; height:22px; cursor:pointer }
+
+/* Loading icon */
+.ygtvloading { background: url(static/images/folders/loading.gif) 0 0 no-repeat; width:16px; height:22px; }
+
+/* the style for the empty cells that are used for rendering the depth 
+ * of the node */
+.ygtvdepthcell { background: url(static/images/folders/vline.gif) 0 0 no-repeat; width:17px; height:22px; }
+
+.ygtvblankdepthcell { width:17px; height:22px; }
+
+/* the style of the div around each node */
+.ygtvitem { }  
+
+/* the style of the div around each node's collection of children */
+.ygtvchildren { }  
+* html .ygtvchildren { height:1%; }  
+
+/* the style of the text label in ygTextNode */
+.ygtvlabel, .ygtvlabel:link, .ygtvlabel:visited, .ygtvlabel:hover { 
+	margin-left:2px;
+	text-decoration: none;
+}
+
+

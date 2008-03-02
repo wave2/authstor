@@ -1,0 +1,13 @@
+<div id='header'>
+<div id='logo'>
+<a href='[% base %]dashboard'><img src='[% base %]static/images/authstorlogo.png' /></a>
+</div>
+<div id='search'>
+<form action="/search" method="post">
+<table>
+<tr><td style='text-align: right;font-size: 0.82em; '>Alan Snelson Preferences <a href='/logout'>Logout</a></td></tr>
+<tr><td>Search:  <input type='text' name='query' size='32' maxlength='255' title="Search"></td></tr>
+</table>
+</form>
+</div>
+</div>

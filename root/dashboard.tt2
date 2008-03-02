@@ -1,0 +1,19 @@
+[% PROCESS head.tt2 -%]
+<body class="yui-skin-sam">
+[% PROCESS yuiCommon.tt2 -%]
+[% PROCESS yuiTreeView.tt2 -%]
+[% PROCESS header.tt2 -%]
+<div id='container'>
+<div id='sidebar'>
+  <div id='menubarDiv'></div>
+  <div id='treeDiv'></div>
+</div>
+<div id='content'>
+<h1>Welcome back </h1>
+<p>No news is good news.</p> 
+<h2>Recent Changes</h2>
+<h2>Tag Cloud</h2>
+[% tag_cloud %]
+</div>
+</div>
+[% PROCESS footer.tt2 -%]

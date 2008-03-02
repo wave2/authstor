@@ -1,0 +1,68 @@
+[% PROCESS header.tt2 -%]
+
+<!-- Dependency source files -->  
+<script src = "http://yui.yahooapis.com/2.3.1/build/yahoo/yahoo-min.js" ></script> 
+<script src = "http://yui.yahooapis.com/2.3.1/build/event/event-min.js" ></script> 
+
+<!-- TreeView source file -->  
+<script src = "http://yui.yahooapis.com/2.3.1/build/treeview/treeview-min.js" ></script>
+
+<script type="text/javascript">
+//global variable to allow console inspection of tree:
+var tree;
+
+//anonymous function wraps the remainder of the logic:
+(function() {
+
+    //function to initialize the tree:
+    function treeInit() {
+
+	//instantiate the tree:
+        tree = new YAHOO.widget.TreeView("treeDiv");
+        [% FOREACH group IN groups -%]
+        var groupNode[% group.id %] = new YAHOO.widget.TextNode('[% group.name %]', tree.getRoot(), false);
+        groupNode[% group.id %].labelStyle = "database";
+        [% FOREACH auth IN auths -%]
+        [% IF auth.group_id==group.id %]
+        var authNode[% auth.id %] = new YAHOO.widget.TextNode('[% auth.username %]', groupNode[% group.id %], false
+);
+        [% END -%]
+        [% END -%]
+        [% END -%]
+        tree.draw();
+    }
+
+	//function builds 10 children for the node you pass in:
+    function buildLargeBranch(node) {
+        if (node.depth < 10) {
+            YAHOO.log("buildRandomTextBranch: " + node.index, "info", "example");
+            for ( var i = 0; i < 10; i++ ) {
+                new YAHOO.widget.TextNode(node.label + "-" + i, node, false);
+            }
+        }
+    }
+
+	//Add a window onload handler to build the tree when the load
+	//event fires.
+    YAHOO.util.Event.addListener(window, "load", treeInit);
+
+})();
+</script>
+<div id='header'>
+<div id='logo'>
+<img src='static/images/authstorlogo.png' />
+</div>
+<div id='search'>Search: <input type=text name=authsearch size=41 maxlength=2048 value=":wq" title="Search"></div>
+</div>
+<div id='container'>
+<div id='sidebar'><div id='treeDiv'></div></div>
+<div id='content'>
+<h1>Welcome to AuthStor</h1>
+<p>Username: [% auth_view.name -%]</p>
+<p>Password: Boder</p> 
+<h2>Notes</h2>
+<p>testing</p>
+</div>
+</div>
+<div id='footer'></div>
+[% PROCESS footer.tt2 -%]
