@@ -1,9 +1,9 @@
 <!-- TreeView -->
-<link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/2.4.1/build/treeview/assets/skins/sam/treeview.css">
+<link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/2.5.2/build/treeview/assets/skins/sam/treeview.css">
 <link rel="stylesheet" href="/tree.css" type="text/css" />
 
 <!-- Source File -->
-<script src = "http://yui.yahooapis.com/2.4.1/build/treeview/treeview-min.js" ></script>
+<script src = "http://yui.yahooapis.com/2.5.2/build/treeview/treeview-min.js" ></script>
 
 <script type="text/javascript">
 YAHOO.util.Event.onDOMReady(function () {
@@ -11,8 +11,9 @@ YAHOO.util.Event.onDOMReady(function () {
     var aItemData = [
 
         { text: "File", submenu: {  id: "filemenu", itemdata: [
-                { text: "New Auth", helptext: "Ctrl + N", onclick:  { fn: addAuth } },
-                { text: "Logout", helptext: "Ctrl + O", onclick:  { fn: logout } }
+                { text: "New Auth", helptext: "Ctrl + N", onclick: { fn: addAuth } },
+		{ text: "New Group", onclick: { fn: addGroup } },
+                { text: "Logout", helptext: "Ctrl + O", onclick: { fn: logout } }
             ] }
         },
         
@@ -29,6 +30,19 @@ YAHOO.util.Event.onDOMReady(function () {
                 ]
             ] }
         },
+
+        { text: "View", submenu: { id: "viewmenu", itemdata: [
+
+                [
+                    { text: "Auths", checked: true },
+                    [% IF c.check_user_roles('admin') %]
+                    { text: "Users", helptext: "Ctrl + Y" }
+                    [% END %]
+                ],
+
+            ] }
+        },
+
 
         { text: "Help", submenu: {  id: "helpmenu", itemdata: [
                 { text: "AuthStor Help", helptext: "Ctrl + H" },
@@ -67,6 +81,14 @@ var tree;
         groupNode[% group.id %].setDynamicLoad(loadNodeData, 1);
         oTextNodeMap[groupNode[% group.id %].contentElId] = groupNode[% group.id %];
         [% ELSE %]
+        myobj = { id: 1, html: '<a href="[% base %]dashboard">AuthStor</a>', container: true };
+        var groupNode1 = new YAHOO.widget.HTMLNode(myobj, tree.getRoot(), false, false);
+        groupNode1.contentStyle = "ygtvroot";
+        groupNode1.depth = -1;
+        groupNode1.setDynamicLoad(loadNodeData, 1);
+        oTextNodeMap[groupNode1.contentElId] = groupNode1;
+
+
         myobj = { id: [% group.id %], label: '[% group.name %]', container: true };
         var groupNode[% group.id %] = new YAHOO.widget.TextNode(myobj, tree.getRoot(), false);
         groupNode[% group.id %].setDynamicLoad(loadNodeData, 1);
@@ -128,8 +150,13 @@ deleteGroupDialog.cfg.queueProperty("buttons", myButtons);
 deleteGroupDialog.render(document.body);
 
 function addGroup() {
+  window.location.href = "[% base %]group/add";
+}
+
+function addGroupP() {
   window.location.href = "[% base %]group/add?parent=" + oTextNodeMap[oCurrentTextNode.id].data.id;
 }
+
 
 function deleteGroup() {
   deleteGroupDialog.setHeader("Delete " + oTextNodeMap[oCurrentTextNode.id].data.label + "?");
@@ -142,9 +169,14 @@ function editGroup() {
   window.location.href = "[% base %]group" + oTextNodeMap[oCurrentTextNode.id].data.id + "/edit";
 }
 
-function addAuth() {
+function addAuthP() {
     window.location.href = "[% base %]auth/add?group_id=" + oTextNodeMap[oCurrentTextNode.id].data.id;
 }
+
+function addAuth() {
+    window.location.href = "[% base %]auth/add";
+}
+
 
 function deleteAuth() {
     window.location.href = "[% base %]auth" + oTextNodeMap[oCurrentTextNode.id].data.id + "/delete";
@@ -164,10 +196,10 @@ function onTriggerContextMenu(p_oEvent) {
   this.clearContent();
 
   if (oTextNodeMap[oCurrentTextNode.id].data.container){
-    this.itemData = [ { text: "Add Group", onclick: { fn: addGroup } },
+    this.itemData = [ { text: "Add Group", onclick: { fn: addGroupP } },
                       { text: "Edit Group", onclick: { fn: editGroup } },
                       { text: "Delete Group", onclick: { fn: deleteGroup } },
-                      { text: "Add Auth", onclick: { fn: addAuth } } ];
+                      { text: "Add Auth", onclick: { fn: addAuthP } } ];
   }else{
     this.itemData = [ { text: "Delete Auth", onclick: { fn: deleteAuth } },
                       { text: "Edit Auth", onclick: { fn: editAuth } } ];

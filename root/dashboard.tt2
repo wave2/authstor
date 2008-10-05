@@ -11,6 +11,12 @@
 <div id='content'>
 <h1>Welcome back </h1>
 <p>No news is good news.</p> 
+    <p>Hello [% c.user.username %], you have the following roles:</p>
+
+    <ul>
+      [% # Dump list of roles -%]
+      [% FOR role = c.user.roles %]<li>[% role %]</li>[% END %]
+    </ul>
 <h2>Recent Changes</h2>
 <h2>Tag Cloud</h2>
 [% tag_cloud %]

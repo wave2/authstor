@@ -1,11 +1,11 @@
 [% PROCESS header.tt2 -%]
 
 <!-- Dependency source files -->  
-<script src = "http://yui.yahooapis.com/2.3.1/build/yahoo/yahoo-min.js" ></script> 
-<script src = "http://yui.yahooapis.com/2.3.1/build/event/event-min.js" ></script> 
+<script src = "http://yui.yahooapis.com/2.5.2/build/yahoo/yahoo-min.js" ></script> 
+<script src = "http://yui.yahooapis.com/2.5.2/build/event/event-min.js" ></script> 
 
 <!-- TreeView source file -->  
-<script src = "http://yui.yahooapis.com/2.3.1/build/treeview/treeview-min.js" ></script>
+<script src = "http://yui.yahooapis.com/2.5.2/build/treeview/treeview-min.js" ></script>
 
 <script type="text/javascript">
 //global variable to allow console inspection of tree:

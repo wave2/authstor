@@ -26,7 +26,7 @@
 <tr><td><p>Name:</p></td><td><input type="text" name="name" id="name" size='22' maxlength='100' value='[% auth_view.name %]' /></td></tr>
 <tr><td><p>URI:</p></td><td><input type="text" name="uri" id="uri" size='40' maxlength='255' value='[% auth_view.uri %]' /></td></tr>
 <tr><td><p>Username:</p></td><td><input type="text" name="username" id="username" size='22' maxlength='100' value='[% auth_view.username %]' /></td></tr>
-<tr><td><p>Password:</p></td><td><input type="text" name="password" id="password" size='22' maxlength='100' value='[% auth_view.password %]'  onkeyup="runPassword(this.value, 'mypassword');" /><input id="randpasswdButton" name="randpasswdButton" value="Suggest Password"></td></tr>
+<tr><td><p>Password:</p></td><td><input type="text" name="password" id="password" size='22' maxlength='100' value='[% auth_pass %]'  onkeyup="runPassword(this.value, 'mypassword');" /><input id="randpasswdButton" name="randpasswdButton" value="Suggest Password"></td></tr>
 <tr><td></td><td><div id='mypassword' class='pwstrength' >Strength</div></td></tr>
 <tr><td><p>Tags:</p></td><td><input type="text" name="tags" id="tags" size='40' maxlength='255' value='[% authtags %]' />space separated</td></tr>
 </table>

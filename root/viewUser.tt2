@@ -1,11 +1,15 @@
 [% PROCESS head.tt2 -%]
+<body class="yui-skin-sam">
 [% PROCESS yuiCommon.tt2 -%]
+[% PROCESS yuiTreeView.tt2 -%]
 [% PROCESS yuiButton.tt2 -%]
-
 [% PROCESS header.tt2 %]
 <div id='container'>
-<div id='sidebar'><div id='treeDiv'></div></div>
-<div id='content' class='yui-skin-sam'>
+<div id='sidebar'>
+  <div id='menubarDiv'></div>
+  <div id='treeDiv'></div>
+</div>
+<div id='content'>
 <h1>[% user_view.first_name %] [% user_view.last_name %]</h1>
 <table>
 <tr><td><p>First Name:</p></td><td><input type="text" name="firstname" id="firstname" size='22' maxlength='100' value='[% user_view.first_name %]'/></td></tr>

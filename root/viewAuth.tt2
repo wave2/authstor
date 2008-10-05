@@ -13,7 +13,7 @@
 <h1>[% auth_view.name %]</h1>
 <p>URI: [% auth_view.uri %]</p>
 <p>Username: [% auth_view.username %]</p>
-<p>Password: [% auth_view.password %]</p>
+<p>Password: [% auth_pass %]</p>
 <h2>Tags</h2>
 [% tag_cloud %]
 <h2>Notes</h2>
@@ -21,7 +21,7 @@
 <h2>Attachments</h2>
 <table>
 [% WHILE (attachment=attachments.next) -%]
-<tr><td>[% attachment.get_column('filename') %]</td></tr>
+<tr><td><a href="[% base %]auth[% auth_view.auth_id %]/att[% attachment.get_column('att_id') %]">[% attachment.get_column('filename') %]</a></td></tr>
 [% END -%]
 </table>
 <hr />
@@ -29,7 +29,7 @@
 <input type='button' id="deleteButton" name="deleteButton" value="Delete">
 <script type='text/javascript'>
   var editButton = new YAHOO.widget.Button("editButton");
-  editButton.addListener("click",function(){window.location.href = "http://www.authstor.org/auth[% auth_view.auth_id %]/edit"});
+  editButton.addListener("click",function(){window.location.href = "[% base %]/auth[% auth_view.auth_id %]/edit"});
   var deleteButton = new YAHOO.widget.Button("deleteButton"); 
 
   var deleteDialog = new YAHOO.widget.SimpleDialog("deleteDialog", { 
