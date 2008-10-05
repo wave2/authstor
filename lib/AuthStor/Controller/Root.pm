@@ -59,19 +59,6 @@ sub default : Private {
     $c->response->redirect($c->uri_for('/dashboard'));
 }
 
-sub item : Regex('^item(\d+)/order(\d+)$') {
-    my ( $self, $c ) = @_;
-    my $item_number  = $c->request->snippets->[0];
-    my $order_number = $c->request->snippets->[1];
-    $c->stash->{item} = $item_number;
-    $c->stash->{order} = $order_number;
-    $c->model('AuthStorDB::Auth')->create({
-                username  => $item_number,
-                password => $order_number
-            });
-    $c->stash->{template} = 'test.tt2';
-}
-
 sub group : Regex('^group(\d+)$') {
     my ( $self, $c ) = @_;
     my $group_id  = $c->request->snippets->[0];

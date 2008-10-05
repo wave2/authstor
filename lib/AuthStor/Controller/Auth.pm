@@ -6,6 +6,8 @@ use base 'Catalyst::Controller';
 use Crypt::GPG;
 use Data::FormValidator;
 use Digest::MD5;
+use File::MimeInfo::Magic;
+use IO::Scalar;
 
 =head1 NAME
 
@@ -34,7 +36,14 @@ sub auth : Regex('^auth(\d+)$') {
     my ( $self, $c ) = @_;
 
     my $auth_id  = $c->request->snippets->[0];
-    $c->stash->{auth_view} = $c->model('AuthStorDB::Auth')->search({auth_id => $auth_id})->next;
+    $c->stash->{auth_view} = $c->model('AuthStorDB::Auth')->search({auth_id => $auth_id})->next();
+
+    $ENV{'GNUPGHOME'} = $c->config->{gpgkeydir};
+    my $gpg = new Crypt::GPG;
+    $gpg->secretkey($c->config->{gpgkeyid});
+    $gpg->passphrase($c->config->{gpgkeypass});
+    my ($plaintext, $signature) = $gpg->verify($c->stash->{auth_view}->get_column('password'));
+    $c->stash->{auth_pass} = $plaintext;
 
     #Get tags
     my $authtags = $c->model('AuthStorDB::AuthTag')->search({ auth_id => $auth_id },
@@ -69,8 +78,8 @@ sub auth : Regex('^auth(\d+)$') {
     $c->stash->{attachments} = $c->model('AuthStorDB::AuthAtt')->search({ auth_id => $auth_id },
     {
       join => 'attachment',
-      select => [ 'attachment.filename' ],
-      as => [qw/filename/],
+      select => [ 'attachment.att_id', 'attachment.filename' ],
+      as => [qw/att_id filename/],
     });
 
     $c->stash->{title} = 'Auth &rsaquo; '.$c->stash->{auth_view}->name;
@@ -81,22 +90,35 @@ sub auth : Regex('^auth(\d+)$') {
 sub att : Regex('^auth(\d+)/att(\d+)$') {
     my ( $self, $c ) = @_;
 
+    my $auth_id  = $c->request->snippets->[0];
+    my $att_id  = $c->request->snippets->[1];
     my $attachment = $c->model('AuthStorDB::Attachment')->single({ att_id => $c->request->snippets->[1] })->filename;
-    $ENV{'GNUPGHOME'} = '/usr/local/www/AuthStor/keys';
+    my $filename = $c->config->{attachments}."/$auth_id/$att_id";
+    $ENV{'GNUPGHOME'} = $c->config->{gpgkeydir};
     my $gpg = new Crypt::GPG;
-    $gpg->secretkey('0BFE0487');
-    $gpg->passphrase('sfiuhsdkjfh234sdhrase');
     #$gpg->debug(1);
-    open(ATT,'/usr/local/www/AuthStor/attachments/1/southparkme.png') or
-      die "Can't open Bobby: $!\n";
+    $gpg->secretkey($c->config->{gpgkeyid});
+    $gpg->passphrase($c->config->{gpgkeypass});
+    open(ATT, $filename) or die "Can't open Attachment: $!\n";
     my $contents = do { local $/;  <ATT> };
+    close(ATT);
     my ($plaintext, $signature) = $gpg->verify($contents);
-    $c->response->headers->content_type('image/png');
+    my $io_scalar = new IO::Scalar \$plaintext;
+    my $mimetype = mimetype( $io_scalar );
+    $c->response->headers->content_type($mimetype);
+    $c->response->header('Content-Disposition' => "attachment; filename=$attachment");
     $c->response->body($plaintext);
 }
 
 sub edit : Regex('^auth(\d+)/edit$') {
     my ( $self, $c ) = @_;
+
+    #Set-up for GPG
+    $ENV{'GNUPGHOME'} = $c->config->{gpgkeydir}; 
+    my $gpg = new Crypt::GPG;
+    $gpg->secretkey($c->config->{gpgkeyid});
+    $gpg->passphrase($c->config->{gpgkeypass});
+
 
     my $auth_id  = $c->request->snippets->[0];
 
@@ -142,9 +164,12 @@ sub edit : Regex('^auth(\d+)/edit$') {
           }
         }
       }
+
+      my $encryptedtext = $gpg->encrypt($c->request->parameters->{password}, $c->config->{gpgkeyemail});
       
       #Update the Auth
-      my $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { name => $c->request->parameters->{name}, uri => $c->request->parameters->{uri}, username => $c->request->parameters->{username}, password => $c->request->parameters->{password}, group_id => $c->request->parameters->{group_id}, notes => $c->request->parameters->{notes} });
+      my $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { name => $c->request->parameters->{name}, uri => $c->request->parameters->{uri}, username => $c->request->parameters->{username}, password => $encryptedtext, group_id => $c->request->parameters->{group_id}, notes => $c->request->parameters->{notes} });
+
 
       #New file?
       if ( my $upload = $c->request->upload('new_att') ) {
@@ -165,8 +190,6 @@ sub edit : Regex('^auth(\d+)/edit$') {
             my $att_id = $attach->att_id;
             my $target = "$directory/$att_id";
 
-            $ENV{'GNUPGHOME'} = '/usr/local/www/AuthStor/keys';
-            my $gpg = new Crypt::GPG;
             my $encrypted = $gpg->encrypt ($file, $c->config->{gpgkeyemail});
             open (ATTACH, ">$target");
             print ATTACH $encrypted;
@@ -177,9 +200,16 @@ sub edit : Regex('^auth(\d+)/edit$') {
             #}
         
         }
+        #Audit Message
+        $c->log->error(1,0,'Auth Updated', $c->request->address);
+
     }
 
     $c->stash->{auth_view} = $c->model('AuthStorDB::Auth')->search({auth_id => $auth_id})->next;
+    my ($plaintext, $signature) = $gpg->verify($c->stash->{auth_view}->get_column('password'
+));
+    $c->stash->{auth_pass} = $plaintext;
+
 
     #Treeview Root Nodes
     $c->stash->{expandGroup} = $c->stash->{auth_view}->group_id;
@@ -218,7 +248,7 @@ sub edit : Regex('^auth(\d+)/edit$') {
       select => [ 'attachment.filename' ],
       as => [qw/filename/],
     });
-
+ 
     $c->stash->{title} = 'Auth &rsaquo; '.$c->stash->{auth_view}->name.' &rsaquo; Edit';
     $c->stash->{post_uri} = '/auth' . $auth_id . '/edit';
     $c->stash->{template} = 'editAuth.tt2';

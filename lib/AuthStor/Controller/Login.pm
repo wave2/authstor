@@ -39,7 +39,7 @@ sub index : Private {
         } else {
             # Set an error message
             $c->stash->{error_msg} = "Bad username or password";
-            $c->log->error(1,1,"Bad username or password", $c->request->address);
+            $c->log->error(1,0,"Bad username or password", $c->request->address);
         }
     }
     

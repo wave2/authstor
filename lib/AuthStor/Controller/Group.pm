@@ -95,8 +95,7 @@ sub delete : Regex('^group(\d+)/delete$') {
       }else{
         #No Auths - lets delete this group
         $c->model('AuthStorDB::Group')->find({group_id => $group_id})->delete;
-        $c->stash->{template} = 'editGroup.tt2';
-        $c->forward('AuthStor::View::TT');
+        $c->response->redirect($c->request->headers->referer);
         return 1;
       }
     } 
