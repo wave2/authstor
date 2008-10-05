@@ -170,7 +170,7 @@ textarea, input, select {
 
 /* Treeview */
 #treewrapper {background: #fff; position:relative;}
-#treeDiv {position:relative; height:400px; width:210px; background: #fff; padding:1em;}
+#treeDiv {position:relative; min-height:400px; width:210px; background: #fff; padding:1em;}
 #treeDiv a {
     border-bottom: none;
     color: #000000;

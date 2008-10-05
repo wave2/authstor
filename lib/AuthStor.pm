@@ -15,6 +15,7 @@ use Catalyst qw/
     StackTrace
     
     Authentication
+    Authorization::Roles
     
     Session
     Session::Store::FastMmap

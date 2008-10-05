@@ -4,11 +4,11 @@ use strict;
 use base 'Catalyst::Model::DBIC::Schema';
 
 __PACKAGE__->config(
-    schema_class => 'AuthStorDB',
+    schema_class => 'AuthStor::Schema::AuthStorDB',
     connect_info => [
         'dbi:mysql:authstor',
-        '[insert username here]',
-        '[insert password here]',
+        'authuser',
+        'YoMagnum',
         
     ],
 );

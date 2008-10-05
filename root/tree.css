@@ -1,7 +1,7 @@
 /* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
 
 /* first or middle sibling, expandable */
-.ygtvroot { color:black; padding-left:24px; background: url(static/images/folders/root.gif) 0 0 no-repeat; width:22px; height:22px; cursor:pointer }
+.ygtvroot { text-align:right;color:black; padding-left:24px; background: url(static/images/folders/root.gif) 0 0 no-repeat; width:72px; height:22px; cursor:pointer }
 
 /* first or middle sibling, no children */
 .ygtvtn { background: url(static/images/folders/tn.gif) 0 0 no-repeat; width:17px; height:22px; }
