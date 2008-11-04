@@ -123,15 +123,15 @@ sub edit : Regex('^auth(\d+)/edit$') {
     my $auth_id  = $c->request->snippets->[0];
 
     #Form submission?
-    if ( $c->request->parameters->{form_submit} eq 'yes' ) {
+    if ( $c->request->parameters->{form_submit} ) {
       my $dfv_profile =
       {
         field_filters => { 
          tags => [qw/trim strip/],
         },
-        'required' => [ qw( username tags ) ],
+        'required' => [ qw( name tags ) ],
       };
-      my $results = Data::FormValidator->check($c->req->params, $dfv_profile);
+      my $results = Data::FormValidator->check($c->req->parameters, $dfv_profile);
       if ($results->has_invalid or $results->has_missing) {
         # do something with $results->invalid, $results->missing
         $c->stash->{errormsg} = $results->msgs;
@@ -260,11 +260,45 @@ sub add : Local {
 
     my $group_id =  $c->request->param('group_id');
 
+    #Set-up for GPG
+    $ENV{'GNUPGHOME'} = $c->config->{gpgkeydir};
+    my $gpg = new Crypt::GPG;
+    $gpg->secretkey($c->config->{gpgkeyid});
+    $gpg->passphrase($c->config->{gpgkeypass});
+
+    #Form submission?
+    if ( $c->request->parameters->{form_submit} ) {
+      my $dfv_profile =
+      {
+        field_filters => {
+         tags => [qw/trim strip/],
+        },
+        'required' => [ qw( name ) ],
+      };
+      my $results = Data::FormValidator->check($c->req->parameters, $dfv_profile);
+      if ($results->has_invalid or $results->has_missing) {
+        # do something with $results->invalid, $results->missing
+        $c->stash->{errormsg} = $results->msgs;
+      } else {
+
+       my $encryptedtext = $gpg->encrypt($c->request->parameters->{password}, $c->config->{gpgkeyemail});
+
+       #Add the Auth
+       my $auth = $c->model('AuthStorDB::Auth')->create( { name => $c->request->parameters->{name}, uri => $c->request->parameters->{uri}, username => $c->request->parameters->{username}, password => $encryptedtext, group_id => $c->request->parameters->{group_id}, notes => $c->request->parameters->{notes} });
+
+       #Add new tags
+       #foreach my $formtag (split('\s+',$results->valid('tags'))){
+         #my $newtag = $c->model('AuthStorDB::Tag')->find_or_create({ tag_text => $formtag });
+         #my $note = $c->model('AuthStorDB::AuthTag')->create({ auth_id => $auth_id, tag_id => $newtag->tag_id });
+       #}
+      }
+    }
+
     #Treeview Root Nodes
     $c->stash->{expandGroup} = $group_id;
     $c->stash->{group} = $c->model('AuthStorDB::Group')->single({ group_id => $group_id });
-    $c->stash->{group_id} = $group_id;
     $c->stash->{groups} = $c->model('AuthStorDB::Group');
+
     $c->stash->{title} = 'Auth &rsaquo; Add';
     $c->stash->{post_uri} = '/auth/add';
     $c->stash->{template} = 'addAuth.tt2';
