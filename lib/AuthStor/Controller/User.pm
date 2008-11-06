@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use base 'Catalyst::Controller';
 use Data::FormValidator;
+use Crypt::SaltedHash;
 
 =head1 NAME
 
@@ -32,10 +33,12 @@ sub add : Local {
     my ( $self, $c ) = @_;
 
     my $username = $c->request->param('username');
-    my $password = $c->request->param('password');
-    my $email_address = $c->request->param('email_address');
-    my $first_name = $c->request->param('first_name');
-    my $last_name = $c->request->param('last_name');
+    my $csh = Crypt::SaltedHash->new(algorithm => 'SHA-512');
+    $csh->add($c->request->param('password'));
+    my $password = $csh->generate();
+    my $email_address = $c->request->param('emailaddress');
+    my $first_name = $c->request->param('firstname');
+    my $last_name = $c->request->param('lastname');
     my $active = $c->request->param('active');
     my $mobile = $c->request->param('mobile');
     my $description = $c->request->param('description');
@@ -47,7 +50,7 @@ sub add : Local {
         field_filters => {
          name => [qw/trim strip/],
         },
-        'required' => [ qw( name ) ],
+        'required' => [ qw( username password ) ],
       };
       my $results = Data::FormValidator->check($c->req->params, $dfv_profile);
       if ($results->has_invalid or $results->has_missing) {
