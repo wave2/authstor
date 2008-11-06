@@ -11,28 +11,24 @@
 </div>
 <div id='content'>
 <form action="[% post_uri %]" method="post" enctype="multipart/form-data">
-<h1>Add Group</h1>
+<h1>Add User</h1>
 [% IF error_msg %]
 <div id="login_error">
   <strong>ERROR</strong>: [% error_msg %].<br />
 </div>
 [% END %]
 <table>
-<tr><td><p>Parent:</p></td><td><select id='parent_id' name='parent_id'>
-[% WHILE (group=groups.next) -%]
-[% IF (parent_id == group.group_id) %]
-<option selected value="[% group.group_id %]">[% group.name %]</option>
-[% ELSE %]
-<option value="[% group.group_id %]">[% group.name %]</option>
-[% END %]
-[% END %]
-</select></td></tr>
-<tr><td><p>Name:</p></td><td><input type="text" name="name" id="name" size='22' maxlength='100' /></td></tr>
+<tr><td><p>Username:</p></td><td><input type="text" name='username' id='username' size='22' maxlength='100' /></td></tr>
+<tr><td><p>Password:</p></td><td><input type="password" name='password' id='password' size='22' maxlength='100' /></td></tr>
+<tr><td><p>First Name:</p></td><td><input type="text" name='firstname' id='firstname' size='22' maxlength='100' /></td></tr>
+<tr><td><p>Last Name:</p></td><td><input type="text" name='lastname' id='lastname' size='22' maxlength='100' /></td></tr>
+<tr><td><p>E-Mail:</p></td><td><input type="text" name='email' id='email' size='22' maxlength='100' /></td></tr>
+<tr><td><p>Mobile:</p></td><td><input type="text" name='mobile' id='mobile' size='22' maxlength='100' /></td></tr>
 </table>
 <h2>Description</h2>
 <textarea id='description' name="description" rows='5' cols='50'></textarea>
 <hr />
-<input id="submitButton" type="submit" name="submitButton" value="Add Group">
+<input id="submitButton" type="submit" name="submitButton" value="Add User">
 <script type='text/javascript'>
   var oPushButton1 = new YAHOO.widget.Button("submitButton")
 </script>
