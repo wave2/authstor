@@ -11,26 +11,26 @@
 </div>
 <div id='content'>
 <form action="[% post_uri %]" method="post" enctype="multipart/form-data">
-<h1>Edit Group [% group_view.name %]</h1>
+<h1>Edit Group [% group.name %]</h1>
 [% IF error_msg %]
 <div id="login_error">
   <strong>ERROR</strong>: [% error_msg %].<br />
 </div>
 [% END %]
 <table>
-<tr><td><p>Parent:</p></td><td><select id='parent' name='parent'>
-[% WHILE (group=groups.next) -%]
-[% IF (group_view.parent_id == group.group_id) %]
-<option selected value="[% group.group_id %]">[% group.name %]</option>
+<tr><td><p>Parent:</p></td><td><select id='parent_id' name='parent_id'>
+[% WHILE (parent=groups.next) -%]
+[% IF (group.parent_id == parent.group_id) %]
+<option selected value="[% parent.group_id %]">[% parent.name %]</option>
 [% ELSE %]
-<option value="[% group.group_id %]">[% group.name %]</option>
+<option value="[% parent.group_id %]">[% parent.name %]</option>
 [% END %]
 [% END %]
 </select></td></tr>
-<tr><td><p>Name:</p></td><td><input type="text" name="name" id="name" size='22' maxlength='100' value='[% group_view.name %]' /></td></tr>
+<tr><td><p>Name:</p></td><td><input type="text" name="name" id="name" size='22' maxlength='100' value='[% group.name %]' /></td></tr>
 </table>
 <h2>Description</h2>
-<textarea name="description" rows='5' cols='50'>[% group_view.description %]</textarea>
+<textarea name="description" rows='5' cols='50'>[% group.description %]</textarea>
 <hr />
 <input id="submitButton" type="submit" name="submitButton" value="Edit Group">
 <script type='text/javascript'>

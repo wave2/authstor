@@ -115,13 +115,35 @@ sub edit : Regex('^group(\d+)/edit$') {
     my ( $self, $c ) = @_;
 
     my $group_id  = $c->request->snippets->[0];
+    my $group = $c->model('AuthStorDB::Group')->single({group_id => $group_id});
+    my $parent_id = $c->request->param('parent_id') ? $c->request->param('parent_id') : 1;
+    my $name = $c->request->param('name');
+    my $description = $c->request->param('description');
 
-    $c->stash->{group_view} = $c->model('AuthStorDB::Group')->single({group_id => $group_id});
+    #Form submission?
+    if ( $c->request->parameters->{form_submit} eq 'yes' ) {
+      my $dfv_profile =
+      {
+        field_filters => {
+         name => [qw/trim strip/],
+        },
+        'required' => [ qw( name ) ],
+      };
+      my $results = Data::FormValidator->check($c->req->params, $dfv_profile);
+      if ($results->has_invalid or $results->has_missing) {
+        # do something with $results->invalid, $results->missing
+        $c->stash->{error_msg} = $results->msgs;
+      }else{
+        #Edit the new Group
+        $group->update({ parent_id => $parent_id, name => $name, description => $description });
+      }
+    }
 
     $c->stash->{expandGroup} = $group_id;
-    $c->stash->{group} = $c->model('AuthStorDB::Group')->single({ group_id => $group_id });
+    $c->stash->{group} = $group;
     $c->stash->{groups} = $c->model('AuthStorDB::Group');
-    $c->stash->{title} = 'Group &rsaquo; '.$c->stash->{group_view}->name.' &rsaquo; Edit';
+    $c->stash->{parent_id} = $parent_id;
+    $c->stash->{title} = 'Group &rsaquo; Edit';
     $c->stash->{template} = 'editGroup.tt2';
     $c->forward('AuthStor::View::TT');
 }
@@ -136,7 +158,7 @@ sub children : Regex('^children(\d+)$') {
       push(@groups,[$group->name,$group->group_id]);
     }
     my @auths;
-    $rs = $c->model('AuthStorDB::Auth')->search({group_id => $group_id});
+    $rs = $c->model('AuthStorDB::Auth')->search({group_id => $group_id, status => 1});
     while(my $auth = $rs->next){
       push(@auths,[$auth->name,$auth->id]);
     }

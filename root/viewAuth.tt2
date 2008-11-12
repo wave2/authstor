@@ -44,10 +44,8 @@
   deleteDialog.setBody("Are you sure you want to delete the auth [% auth_view.name %]?");
   deleteDialog.cfg.setProperty("icon",YAHOO.widget.SimpleDialog.ICON_WARN);
 var handleYes = function() {
- //user confirms the deletion of this item;
- //this method would perform that deletion;
- //when ready, hide the SimpleDialog:
- this.hide();
+  window.location.href = "[% base %]auth[% auth_view.auth_id %]/delete"; 
+  this.hide();
 }
 var handleNo = function() {
  //user cancels item deletion; this method

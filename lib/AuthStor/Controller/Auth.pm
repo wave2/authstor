@@ -87,6 +87,16 @@ sub auth : Regex('^auth(\d+)$') {
     $c->forward('AuthStor::View::TT');
 }
 
+sub delete : Regex('^auth(\d+)/delete$') {
+    my ( $self, $c ) = @_;
+
+    my $auth_id  = $c->request->snippets->[0];
+    my $auth = $c->model('AuthStorDB::Auth')->search({auth_id => $auth_id})->next();
+    $auth->update({ status => 0 });
+
+    $c->response->redirect($c->uri_for('/dashboard'));
+}
+
 sub att : Regex('^auth(\d+)/att(\d+)$') {
     my ( $self, $c ) = @_;
 
