@@ -105,7 +105,6 @@ function runPassword(strPassword, strFieldID)
     {
         var attributes = {
             backgroundColor: { to: '#0ca908' },
-            width: { to: 200 }
         };
     }
     // -- Secure
@@ -113,7 +112,6 @@ function runPassword(strPassword, strFieldID)
     {
         var attributes = {
             backgroundColor: { to: '#7ff67c' },
-            width: { to: 170 }
         };
     }
     // -- Very Strong
@@ -121,7 +119,6 @@ function runPassword(strPassword, strFieldID)
     {
         var attributes = {
             backgroundColor: { to: '#1740ef' },
-            width: { to: 140 }
         };
     }
     // -- Strong
@@ -129,7 +126,6 @@ function runPassword(strPassword, strFieldID)
     {
         var attributes = {
             backgroundColor: { to: '#5a74e3' },
-            width: { to: 110 }
         };
     }
     // -- Average
@@ -137,7 +133,6 @@ function runPassword(strPassword, strFieldID)
     {
         var attributes = {
             backgroundColor: { to: '#e3cb00' },
-            width: { to: 80 }
         };
     }
     // -- Weak
@@ -145,7 +140,6 @@ function runPassword(strPassword, strFieldID)
     {
         var attributes = {
             backgroundColor: { to: '#e7d61a' },
-            width: { to: 65 }
         };
     }
     // -- Very Weak
@@ -153,7 +147,6 @@ function runPassword(strPassword, strFieldID)
     {
         var attributes = {
             backgroundColor: { to: '#e71a1a' },
-            width: { to: 50 }
         };
     }
     var anim = new YAHOO.util.ColorAnim(strFieldID, attributes);
@@ -176,3 +169,13 @@ function countContain(strPassword, strCheck)
  
         return nCount; 
 } 
+
+function suggestPassword(pwField, baseUrl)
+{
+  var genCallBack = {success : function (o) {
+    var password = YAHOO.lang.JSON.parse(o.responseText);
+    pwField.value = password.randpasswd;
+    runPassword(password.randpasswd, 'password');},
+  };
+  YAHOO.util.Connect.asyncRequest('GET',baseUrl + '/util/randpasswd', genCallBack);
+}

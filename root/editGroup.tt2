@@ -20,8 +20,8 @@
 <table>
 <tr><td><p>Parent:</p></td><td><select id='parent_id' name='parent_id'>
 [% WHILE (parent=groups.next) -%]
-[% IF (group.parent_id == parent.group_id) %]
-<option selected value="[% parent.group_id %]">[% parent.name %]</option>
+[% IF (group.parent_id == 0) %]
+<option selected value="0">AuthStor</option>
 [% ELSE %]
 <option value="[% parent.group_id %]">[% parent.name %]</option>
 [% END %]

@@ -21,7 +21,7 @@ CREATE TABLE `attachments` (
   `filename` varchar(255) DEFAULT NULL,
   `md5sum` char(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`att_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `auditlog` (
   `message` varchar(255) NOT NULL,
   `ipaddress` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`audit_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=57 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -95,10 +95,10 @@ CREATE TABLE `auths` (
   `group_id` int(10) unsigned DEFAULT NULL,
   `description` text,
   `name` varchar(255) DEFAULT NULL,
-  `newcolumn` int(11) DEFAULT NULL,
   `notes` text,
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`auth_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -116,19 +116,19 @@ CREATE TABLE `events` (
 SET character_set_client = @saved_cs_client;
 
 --
--- Table structure for table `groups`
+-- Table structure for table `auth_groups`
 --
 
-DROP TABLE IF EXISTS `groups`;
+DROP TABLE IF EXISTS `auth_groups`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `groups` (
+CREATE TABLE `auth_groups` (
   `group_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(10) unsigned DEFAULT '1',
-  `description` text,
   `name` varchar(100) DEFAULT NULL,
+  `description` text,
   PRIMARY KEY (`group_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -157,7 +157,7 @@ CREATE TABLE `tags` (
   `tag_text` text CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`tag_id`),
   UNIQUE KEY `tag_text` (`tag_text`(100))
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -192,10 +192,12 @@ CREATE TABLE `users` (
   `mobile` varchar(100) DEFAULT NULL,
   `description` text,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+INSERT INTO users (user_id,username,password) VALUES (0,'admin','{SSHA512}zgBFr+94mwysN+IfFQYGmuxKAuoo/iDcdwe7nnMARYb2hkguNA2WqUWEmqwOBzEHVpsA6hoAOgH7Xq2ysSEUYqNNAVw=');
+
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;

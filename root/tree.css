@@ -51,8 +51,13 @@
 
 /* the style of the text label in ygTextNode */
 .ygtvlabel, .ygtvlabel:link, .ygtvlabel:visited, .ygtvlabel:hover { 
-	margin-left:2px;
-	text-decoration: none;
+  color: #000000;
+  margin-left:2px;
+  text-decoration: none;
+}
+
+.ygtvcontent {
+  color: #000000;
 }
 
 
