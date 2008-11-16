@@ -1,15 +1,15 @@
-package AuthStor::Schema::AuthStorDB::Group;
+package AuthStor::Schema::AuthStorDB::AuthGroup;
 
 use base qw/DBIx::Class/;
 
 __PACKAGE__->load_components(qw/PK::Auto Core/);
-__PACKAGE__->table('groups');
+__PACKAGE__->table('auth_groups');
 __PACKAGE__->add_columns(qw/group_id description name parent_id/);
 __PACKAGE__->set_primary_key('group_id');
 
 =head1 NAME
 
-AuthStorDB::Group - A model object representing a person with access to the system.
+AuthStorDB::AuthGroup - A model object representing a person with access to the system.
 
 =head1 DESCRIPTION
 
