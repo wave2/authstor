@@ -72,7 +72,7 @@ sub auth : Regex('^auth(\d+)$') {
 
     #Treeview Root Nodes
     $c->stash->{expandGroup} = $c->stash->{auth_view}->group_id;
-    $c->stash->{group} = $c->model('AuthStorDB::Group')->single({ group_id => $c->stash->{auth_view}->group_id });
+    $c->stash->{group} = $c->model('AuthStorDB::AuthGroup')->single({ group_id => $c->stash->{auth_view}->group_id });
 
     #Attachments
     $c->stash->{attachments} = $c->model('AuthStorDB::AuthAtt')->search({ auth_id => $auth_id },
@@ -223,8 +223,8 @@ sub edit : Regex('^auth(\d+)/edit$') {
 
     #Treeview Root Nodes
     $c->stash->{expandGroup} = $c->stash->{auth_view}->group_id;
-    $c->stash->{group} = $c->model('AuthStorDB::Group')->single({ group_id => $c->stash->{auth_view}->group_id });
-    $c->stash->{groups} = $c->model('AuthStorDB::Group');
+    $c->stash->{group} = $c->model('AuthStorDB::AuthGroup')->single({ group_id => $c->stash->{auth_view}->group_id });
+    $c->stash->{groups} = $c->model('AuthStorDB::AuthGroup');
 
     #Get tags
     my $authtags = $c->model('AuthStorDB::AuthTag')->search({ auth_id => $auth_id },
@@ -306,8 +306,8 @@ sub add : Local {
 
     #Treeview Root Nodes
     $c->stash->{expandGroup} = $group_id;
-    $c->stash->{group} = $c->model('AuthStorDB::Group')->single({ group_id => $group_id });
-    $c->stash->{groups} = $c->model('AuthStorDB::Group');
+    $c->stash->{group} = $c->model('AuthStorDB::AuthGroup')->single({ group_id => $group_id });
+    $c->stash->{groups} = $c->model('AuthStorDB::AuthGroup');
 
     $c->stash->{title} = 'Auth &rsaquo; Add';
     $c->stash->{post_uri} = '/auth/add';

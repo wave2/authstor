@@ -22,6 +22,17 @@ Catalyst Controller.
 
 =cut
 
+sub getParents($$) {
+  my ($c,$currentParent) = @_; 
+  my @parents;
+  push(@parents, $currentParent);
+  while ($currentParent != 0){
+    $currentParent = $c->model('AuthStorDB::AuthGroup')->search({ group_id => $currentParent })->next->parent_id;
+    push(@parents, $currentParent);
+  }
+  return \@parents;
+}
+
 sub index : Private {
     my ( $self, $c ) = @_;
 
@@ -32,12 +43,12 @@ sub group : Regex('^group(\d+)$') {
     my ( $self, $c ) = @_;
 
     my $group_id  = $c->request->snippets->[0];
-    $c->stash->{group_view} = $c->model('AuthStorDB::Group')->single({group_id => $group_id});
+    my $group = $c->model('AuthStorDB::AuthGroup')->single({ group_id => $group_id });
+    $c->stash->{group_view} = $c->model('AuthStorDB::AuthGroup')->single({group_id => $group_id});
 
     #Treeview Root Nodes
-    $c->stash->{expandGroup} = $c->stash->{group_view}->parent_id;
-    $c->stash->{group} = $c->model('AuthStorDB::Group')->single({ group_id => $group_id });
-
+    $c->stash->{parents} = getParents($c, $group->parent_id);
+    $c->stash->{group} = $group;
     $c->stash->{title} = 'Group &rsaquo; '.$c->stash->{group_view}->name;
     $c->stash->{template} = 'viewGroup.tt2';
     $c->forward('AuthStor::View::TT');
@@ -46,7 +57,8 @@ sub group : Regex('^group(\d+)$') {
 sub add : Local {
     my ( $self, $c ) = @_;
 
-    my $parent_id = $c->request->param('parent_id') ? $c->request->param('parent_id') : 1;
+    my $parent_id = $c->request->param('parent_id') ? $c->request->param('parent_id') : 0;
+    my $group = $c->model('AuthStorDB::AuthGroup')->single({ group_id => $parent_id });
     my $name = $c->request->param('name');
     my $description = $c->request->param('description');
 
@@ -65,13 +77,14 @@ sub add : Local {
         $c->stash->{error_msg} = $results->msgs;
       }else{
        #Add the new Group
-       my $group = $c->model('AuthStorDB::Group')->create({ parent_id => $parent_id, name => $name, description => $description });
+       my $group = $c->model('AuthStorDB::AuthGroup')->create({ parent_id => $parent_id, name => $name, description => $description });
+       $c->response->redirect($c->uri_for('/group'.$group->group_id));
       }
     }
-
-    $c->stash->{expandGroup} = $parent_id;
-    $c->stash->{group} = $c->model('AuthStorDB::Group')->single({ group_id => $parent_id });
-    $c->stash->{groups} = $c->model('AuthStorDB::Group');
+   
+    $c->stash->{parents} = $parent_id ? getParents($c, $group->parent_id) : 0;
+    $c->stash->{group} = $group;
+    $c->stash->{groups} = $c->model('AuthStorDB::AuthGroup');
     $c->stash->{parent_id} = $parent_id;
     $c->stash->{title} = 'Group &rsaquo; Add';
     $c->stash->{template} = 'addGroup.tt2';
@@ -84,9 +97,9 @@ sub delete : Regex('^group(\d+)/delete$') {
     my $group_id  = $c->request->snippets->[0];
 
     #Check for child groups
-    if ($c->model('AuthStorDB::Group')->count({parent_id => $group_id})) {
+    if ($c->model('AuthStorDB::AuthGroup')->count({parent_id => $group_id})) {
       #found child groups
-      $c->stash->{error_msg} = $c->model('AuthStorDB::Group')->count({parent_id => $group_id}).'group';
+      $c->stash->{error_msg} = $c->model('AuthStorDB::AuthGroup')->count({parent_id => $group_id}).'group';
     }else{
       #No child groups.  Check for Auths
       if ($c->model('AuthStorDB::Auth')->count({group_id => $group_id})) {
@@ -94,17 +107,16 @@ sub delete : Regex('^group(\d+)/delete$') {
         $c->stash->{error_msg} = $c->model('AuthStorDB::Auth')->count({group_id => $group_id}).'auth';
       }else{
         #No Auths - lets delete this group
-        $c->model('AuthStorDB::Group')->find({group_id => $group_id})->delete;
+        $c->model('AuthStorDB::AuthGroup')->find({group_id => $group_id})->delete;
         $c->response->redirect($c->request->headers->referer);
         return 1;
       }
     } 
 
-    $c->stash->{group_view} = $c->model('AuthStorDB::Group')->single({group_id => $group_id});
+    $c->stash->{group_view} = $c->model('AuthStorDB::AuthGroup')->single({group_id => $group_id});
 
-    $c->stash->{expandGroup} = $group_id;
-    $c->stash->{group} = $c->model('AuthStorDB::Group')->single({ group_id => $group_id });
-    $c->stash->{groups} = $c->model('AuthStorDB::Group');
+    $c->stash->{group} = $c->model('AuthStorDB::AuthGroup')->single({ group_id => $group_id });
+    $c->stash->{groups} = $c->model('AuthStorDB::AuthGroup');
     $c->stash->{title} = 'Group &rsaquo; '.$c->stash->{group_view}->name.' &rsaquo; Edit';
     $c->stash->{template} = 'editGroup.tt2';
     $c->forward('AuthStor::View::TT');
@@ -115,8 +127,7 @@ sub edit : Regex('^group(\d+)/edit$') {
     my ( $self, $c ) = @_;
 
     my $group_id  = $c->request->snippets->[0];
-    my $group = $c->model('AuthStorDB::Group')->single({group_id => $group_id});
-    my $parent_id = $c->request->param('parent_id') ? $c->request->param('parent_id') : 1;
+    my $group = $c->model('AuthStorDB::AuthGroup')->single({group_id => $group_id});    my $parent_id = $c->request->param('parent_id') ? $group->parent_id : 0;
     my $name = $c->request->param('name');
     my $description = $c->request->param('description');
 
@@ -139,9 +150,10 @@ sub edit : Regex('^group(\d+)/edit$') {
       }
     }
 
-    $c->stash->{expandGroup} = $group_id;
+
+    $c->stash->{parents} = getParents($c, $group->parent_id);
     $c->stash->{group} = $group;
-    $c->stash->{groups} = $c->model('AuthStorDB::Group');
+    $c->stash->{groups} = $c->model('AuthStorDB::AuthGroup');
     $c->stash->{parent_id} = $parent_id;
     $c->stash->{title} = 'Group &rsaquo; Edit';
     $c->stash->{template} = 'editGroup.tt2';
@@ -151,9 +163,9 @@ sub edit : Regex('^group(\d+)/edit$') {
 sub children : Regex('^children(\d+)$') {
     my ( $self, $c ) = @_;
     my $group_id  = $c->request->snippets->[0];
-    #$c->stash->{message} = $c->model('AuthStorDB::Group')->search({parent_id => $group_id})->next->name;
+    #$c->stash->{message} = $c->model('AuthStorDB::AuthGroup')->search({parent_id => $group_id})->next->name;
     my @groups;
-    my $rs = $c->model('AuthStorDB::Group')->search({parent_id => $group_id});
+    my $rs = $c->model('AuthStorDB::AuthGroup')->search({parent_id => $group_id});
     while(my $group = $rs->next){
       push(@groups,[$group->name,$group->group_id]);
     }

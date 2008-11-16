@@ -33,8 +33,8 @@ sub index : Private {
         # Return 0 to cancel 'post-auto' processing and prevent use of application
         return 0;
     }
-    $c->stash->{expandGroup} = 1;
-    $c->stash->{group} = $c->model('AuthStorDB::Group')->single({ parent_id => 0 });
+    $c->stash->{expandGroup} = 0;
+    $c->stash->{group} = $c->model('AuthStorDB::AuthGroup')->single({ parent_id => 0 });
     # Tag Cloud
     my $cloud = HTML::TagCloud->new(levels=>5);
     my $tags = $c->model('AuthStorDB::AuthTag')->search({},

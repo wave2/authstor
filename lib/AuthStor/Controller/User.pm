@@ -76,7 +76,7 @@ sub user : Regex('^user(\d+)$') {
   
     #Set-Up TreeView
     $c->stash->{expandGroup} = 1;
-    $c->stash->{group} = $c->model('AuthStorDB::Group')->single({ parent_id => 0 });
+    $c->stash->{group} = $c->model('AuthStorDB::AuthGroup')->single({ parent_id => 0 });
 
     $c->stash->{title} = 'User &rsaquo '.$c->stash->{user_view}->first_name.' '.$c->stash->{user_view}->last_name;
     $c->stash->{template} = 'viewUser.tt2';

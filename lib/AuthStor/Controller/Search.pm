@@ -26,7 +26,7 @@ sub index : Private {
 
     my $query = $c->request->params->{query} || "";
     $c->stash->{search_results} = $c->model('AuthStorDB::Auth')->search({name => { 'like', "%$query%" }});
-    $c->stash->{groups} = [$c->model('AuthStorDB::Group')->search({ parent_id => 0 })];
+    $c->stash->{groups} = [$c->model('AuthStorDB::AuthGroup')->search({ parent_id => 0 })];
     $c->stash->{search_title} = 'Search Results for ' . $query;
     $c->stash->{template} = 'searchResults.tt2';
     $c->forward('AuthStor::View::TT');
@@ -37,7 +37,7 @@ sub tag : LocalRegex('^tag$') {
 
     $c->stash->{search_results} = $c->model('AuthStorDB::Auth')->search({tag_text => $tag_text},
     { join => {'map_auth_tag'=>'tag'} });
-    $c->stash->{groups} = [$c->model('AuthStorDB::Group')->search({ parent_id => 0 })];
+    $c->stash->{groups} = [$c->model('AuthStorDB::AuthGroup')->search({ parent_id => 0 })];
     $c->stash->{search_title} = 'Auths tagged with ' . $tag_text;
     $c->stash->{template} = 'searchResults.tt2';
     $c->forward('AuthStor::View::TT');

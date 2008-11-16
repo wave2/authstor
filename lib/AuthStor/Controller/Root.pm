@@ -62,9 +62,9 @@ sub default : Private {
 sub group : Regex('^group(\d+)$') {
     my ( $self, $c ) = @_;
     my $group_id  = $c->request->snippets->[0];
-    #$c->stash->{message} = $c->model('AuthStorDB::Group')->search({parent_id => $group_id})->next->name;
+    #$c->stash->{message} = $c->model('AuthStorDB::AuthGroup')->search({parent_id => $group_id})->next->name;
     my @groups;
-    my $rs = $c->model('AuthStorDB::Group')->search({parent_id => $group_id});
+    my $rs = $c->model('AuthStorDB::AuthGroup')->search({parent_id => $group_id});
     while(my $group = $rs->next){
       push(@groups,[$group->name,$group->id]);
     }

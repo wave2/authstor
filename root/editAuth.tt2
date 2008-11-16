@@ -11,10 +11,12 @@
   <div id='treeDiv'></div>
 </div>
 <div id='content'>
-<form action="[% post_uri %]" method="post" enctype="multipart/form-data">
+<form id='editAuthForm' action="[% post_uri %]" method="post" enctype="multipart/form-data">
+<fieldset>
 <h1>Edit [% auth_view.name %]</h1>
-<table>
-<tr><td><p>Group:</p></td><td><select id='group_id' name='group_id'>
+<div class='required'>
+<label for='group_id'>Group:</label>
+<select id='group_id' name='group_id'>
 [% WHILE (group=groups.next) -%]
 [% IF (expandGroup == group.group_id) %]
 <option selected value="[% group.group_id %]">[% group.name %]</option>
@@ -22,59 +24,43 @@
 <option value="[% group.group_id %]">[% group.name %]</option>
 [% END %]
 [% END %]
-</select></td></tr>
-<tr><td><p>Name:</p></td><td><input type="text" name="name" id="name" size='22' maxlength='100' value='[% auth_view.name %]' /></td></tr>
-<tr><td><p>URI:</p></td><td><input type="text" name="uri" id="uri" size='40' maxlength='255' value='[% auth_view.uri %]' /></td></tr>
-<tr><td><p>Username:</p></td><td><input type="text" name="username" id="username" size='22' maxlength='100' value='[% auth_view.username %]' /></td></tr>
-<tr><td><p>Password:</p></td><td><input type="text" name="password" id="password" size='22' maxlength='100' value='[% auth_pass %]'  onkeyup="runPassword(this.value, 'mypassword');" /><input id="randpasswdButton" name="randpasswdButton" value="Suggest Password"></td></tr>
-<tr><td></td><td><div id='mypassword' class='pwstrength' >Strength</div></td></tr>
-<tr><td><p>Tags:</p></td><td><input type="text" name="tags" id="tags" size='40' maxlength='255' value='[% authtags %]' />space separated</td></tr>
-</table>
+</select>
+</div>
+<div class='required'>
+<label for='name'>Name:</label>
+<input type="text" name="name" id="name" size='22' maxlength='100' value='[% auth_view.name %]' />
+</div>
+<div class='optional'>
+<label for='uri'>URI:</label>
+<input type="text" name="uri" id="uri" size='40' maxlength='255' value='[% auth_view.uri %]' />
+</div>
+<div class='optional'>
+<label for='username'>Username:</label>
+<input type="text" name="username" id="username" size='22' maxlength='100' value='[% auth_view.username %]' />
+</div>
+<div class='optional'>
+<label for='password'>Password:</label>
+<input type="text" name="password" id="password" size='22' maxlength='100' value='[% auth_pass %]'  onkeyup="runPassword(this.value, 'password');" /><button onclick="suggestPassword(document.forms['editAuthForm'].password, '[% base %]');" id="genPassButton" type="button" style="font-size:10pt">Suggest Password</button>
+</div>
+<div class='optional'>
+<label for='tags'>Tags:</label>
+<input type="text" name="tags" id="tags" size='40' maxlength='255' value='[% authtags %]' />space separated
+</div>
+[% IF tag_cloud %]
 <h2>Tag Selector</h2>
 [% tag_cloud %]
-[% errormsg %]
+[% END %]
 <h2>Notes</h2>
 <textarea name="notes" rows='5' cols='50'>[% auth_view.notes %]</textarea>
 <h2>Attachments</h2>
-<table>
 [% WHILE (attachment=attachments.next) -%]
-<tr><td>[% attachment.get_column('filename') %]</td></tr>
+[% attachment.get_column('filename') %]
 [% END -%]
-</table>
-   <p>
-      <label for="file">Attach a file:</label> <input type="file" name="new_att" id="new_att"> <br />
-   <p>
-
-<p>
+<label for="file">Attach a file:</label> <input type="file" name="new_att" id="new_att"> <br />
 <hr />
 <input id="submitButton" type="submit" name="submitButton" value="Update [% auth_view.name %]">
-<script src="http://yui.yahooapis.com/2.4.1/build/json/json-beta-min.js"></script>
-<script type='text/javascript'>
-  var oPushButton1 = new YAHOO.widget.Button("randpasswdButton")
-  function onPushButton1Click(e) { 
-    var randpasscall = {
-    // Successful XHR response handler
-    success : function (o) {
-      // Use the JSON Utility to parse the data returned from the server
-      try {
-          var randresponse = YAHOO.lang.JSON.parse(o.responseText);
-      }
-      catch (x) {
-          alert('JSON Parse Failed');
-          return;
-      }
-      document.getElementById("password").value = randresponse.randpasswd;
-    },
-    };
-
-  // Make the call to the server for JSON data
-  YAHOO.util.Connect.asyncRequest('GET',"http://www.authstor.org/util/randpasswd", randpasscall);
-  } 
-  oPushButton1.addListener("click", onPushButton1Click); 
-  var oPushButton2 = new YAHOO.widget.Button("submitButton")
-</script>
-</p>
 <input type="hidden" name="form_submit" value="yes">
+</fieldset>
 </form>
 </div>
 </div>

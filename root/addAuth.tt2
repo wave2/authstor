@@ -11,10 +11,12 @@
   <div id='treeDiv'></div>
 </div>
 <div id='content'>
-<form action="[% post_uri %]" method="post" enctype="multipart/form-data">
+<form id='addAuthForm' action="[% post_uri %]" method="post" enctype="multipart/form-data">
+<fieldset>
 <h1>Add Auth</h1>
-<table>
-<tr><td><p>Group:</p></td><td><select id='group_id' name='group_id'>
+<div class="required">
+<label for="group_id">Group:</label>
+<select id='group_id' name='group_id'>
 [% WHILE (group=groups.next) -%]
 [% IF (group_id == group.group_id) %]
 <option selected value="[% group.group_id %]">[% group.name %]</option>
@@ -22,36 +24,46 @@
 <option value="[% group.group_id %]">[% group.name %]</option>
 [% END %]
 [% END %]
-</select></td></tr>
-<tr><td><p>Name:</p></td><td><input type="text" name="name" id="name" size='22' maxlength='100' /></td></tr>
-<tr><td><p>URI:</p></td><td><input type="text" name="uri" id="uri" size='40' maxlength='255' /></td></tr>
-<tr><td><p>Username:</p></td><td><input type="text" name="username" id="username" size='22' maxlength='100' /></td></tr>
-<tr><td><p>Password:</p></td><td><input type="text" name="password" id="password" size='22' maxlength='100' onkeyup="runPassword(this.value, 'mypassword');" /></td></tr>
-<tr><td></td><td><div id='mypassword' class='pwstrength' >Strength</div></td></tr>
-<tr><td><p>Tags:</p></td><td><input type="text" name="tags" id="tags" size='40' maxlength='255' />space separated</td></tr>
-</table>
+</select>
+</div>
+<div class="required">
+<label for="name">Name:</label>
+<input type="text" name="name" id="name" size='22' maxlength='100' />
+</div>
+<div class="optional">
+<label for="uri">URI:</label>
+<input type="text" name="uri" id="uri" size='40' maxlength='255' />
+</div>
+<div class="optional">
+<label for="username">Username:</label>
+<input type="text" name="username" id="username" size='22' maxlength='100' />
+</div>
+<div class="optional">
+<label for="password">Password:</label><input type="text" name="password" id="password" size='22' maxlength='100' onkeyup="runPassword(this.value, 'password');" /><button onclick="suggestPassword(document.forms['addAuthForm'].password, '[% base %]');" id="genPassButton" type="button" style="font-size: 10pt">Suggest Password</button>
+</div>
+<div class="optional">
+<label for="tags">Tags:</label>
+<input type="text" name="tags" id="tags" size='40' maxlength='255' />space separated
+</div>
+[% IF tag_cloud %]
 <h2>Tag Selector</h2>
 [% tag_cloud %]
+[% END %]
 <h2>Notes</h2>
 <textarea name="notes" rows='5' cols='50'></textarea>
 <h2>Attachments</h2>
-<table>
 [% WHILE (attachment=attachments.next) -%]
-<tr><td>[% attachment.get_column('filename') %]</td></tr>
+[% attachment.get_column('filename') %]
 [% END -%]
-</table>
-   <p>
-      <label for="file">Attach a file:</label> <input type="file" name="new_att" id="new_att"> <br />
-   <p>
+<label for="file">Attach a file:</label> <input type="file" name="new_att" id="new_att"> <br />
 
-<p>
 <hr />
 <input id="submitButton" type="submit" name="submitButton" value="Add Auth">
 <script type='text/javascript'>
-  var oPushButton1 = new YAHOO.widget.Button("submitButton")
+  var oPushButton1 = new YAHOO.widget.Button("submitButton");
 </script>
-</p>
 <input type="hidden" name="form_submit" value="yes">
+</fieldset>
 </form>
 </div>
 </div>

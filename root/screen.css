@@ -202,7 +202,8 @@ textarea, input, select {
 }
 
 #container {
-    width:expression(document.body.clientWidth < 782? "780px" : document.body.clientWidth > 1262? "1260px" : "auto");
+  clear: both;
+  width: 100%;
 }
 
 #sidebar {
@@ -210,7 +211,7 @@ textarea, input, select {
 }
 
 #content {
-    padding-left: 260px;
+  margin-left: 245px;
 }
 
 #content h1 {
@@ -232,11 +233,34 @@ textarea, input, select {
     line-height: 1.4em;
 }
 
+form fieldset {
+  font: 1.2em/1.4em Tahoma, sans-serif;
+  color: #fff;
+  border-style: none;
+  margin: 0;
+}
+
+form label {
+  float: left;
+  width: 100px;
+  display: block;
+}
+
+div .optional {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+div .required {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
 /* Password Strength */
 .pwstrength {
     font: 0.8em/1.8em Tahoma, sans-serif;
     color: #fff;
-    width: 200px; 
+    width: 220px; 
     height: 18px;
 }
 

@@ -1,9 +1,9 @@
 <!-- TreeView -->
-<link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/2.5.2/build/treeview/assets/skins/sam/treeview.css">
+<link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/2.6.0/build/treeview/assets/skins/sam/treeview.css">
 <link rel="stylesheet" href="/tree.css" type="text/css" />
 
 <!-- Source File -->
-<script src = "http://yui.yahooapis.com/2.5.2/build/treeview/treeview-min.js" ></script>
+<script src = "http://yui.yahooapis.com/2.6.0/build/treeview/treeview-min.js" ></script>
 
 <script type="text/javascript">
 YAHOO.util.Event.onDOMReady(function () {
@@ -73,27 +73,12 @@ var tree;
         //turn dynamic loading on for entire tree: 
         var myobj = { label: "", id:"" };
 
-        [% IF group.id == 1 %]
-        myobj = { id: [% group.id %], html: '[% group.name %]', container: true };
-        var groupNode[% group.id %] = new YAHOO.widget.HTMLNode(myobj, tree.getRoot(), false, false);
-        groupNode[% group.id %].contentStyle = "ygtvroot";
-        groupNode[% group.id %].depth = -1;
-        groupNode[% group.id %].setDynamicLoad(loadNodeData, 1);
-        oTextNodeMap[groupNode[% group.id %].contentElId] = groupNode[% group.id %];
-        [% ELSE %]
-        myobj = { id: 1, html: '<a href="[% base %]dashboard">AuthStor</a>', container: true };
-        var groupNode1 = new YAHOO.widget.HTMLNode(myobj, tree.getRoot(), false, false);
-        groupNode1.contentStyle = "ygtvroot";
-        groupNode1.depth = -1;
-        groupNode1.setDynamicLoad(loadNodeData, 1);
-        oTextNodeMap[groupNode1.contentElId] = groupNode1;
-
-
-        myobj = { id: [% group.id %], label: '[% group.name %]', container: true };
-        var groupNode[% group.id %] = new YAHOO.widget.TextNode(myobj, tree.getRoot(), false);
-        groupNode[% group.id %].setDynamicLoad(loadNodeData, 1);
-        oTextNodeMap[groupNode[% group.id %].labelElId] = groupNode[% group.id %];
-        [% END %]
+    myobj = { id: 0, html: '<a href="[% base %]dashboard">AuthStor</a>', container: true };
+    var groupNode0 = new YAHOO.widget.HTMLNode(myobj, tree.getRoot(), false, false);
+    groupNode0.contentStyle = "ygtvroot";
+    groupNode0.depth = -1;
+    groupNode0.setDynamicLoad(loadNodeData, 1);
+    oTextNodeMap[groupNode0.contentElId] = groupNode0;
 
         //Fire an event when the label is clicked: 
         tree.subscribe("labelClick", function(node) { 
@@ -103,9 +88,7 @@ var tree;
         }); 
         tree.draw();
         //Expand to node
-        [% IF expandGroup %]
-        groupNode[% expandGroup %].expand();
-        [% END %]
+        groupNode0.expand();
     }
 
         //Add a window onload handler to build the tree when the load
@@ -154,7 +137,7 @@ function addGroup() {
 }
 
 function addGroupP() {
-  window.location.href = "[% base %]group/add?parent=" + oTextNodeMap[oCurrentTextNode.id].data.id;
+  window.location.href = "[% base %]group/add?parent_id=" + oTextNodeMap[oCurrentTextNode.id].data.id;
 }
 
 
@@ -259,6 +242,11 @@ function loadNodeData(node, fnLoadComplete)  {
                         var tempNode = new YAHOO.widget.TextNode(myobj, node, false);
                         tempNode.setDynamicLoad(loadNodeData, 1);
                         oTextNodeMap[tempNode.labelElId] = tempNode;
+                        [% FOREACH parentid IN parents %]
+			  if(oResults.Nodes[i][1] == [% parentid %]){
+			    tempNode.expand();
+			  }
+			[% END %]
                     } 
                 } else { 
                     //there is only one result; comes as string: 

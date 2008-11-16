@@ -3,7 +3,7 @@ package AuthStor::Controller::Util;
 use strict;
 use warnings;
 use base 'Catalyst::Controller';
-use Text::Password::Pronounceable;
+use String::Random;
 
 #
 # Sets the actions in this controller to be registered with no prefix
@@ -36,7 +36,9 @@ sub default : Private {
 sub randpasswd : Regex('^util/randpasswd$') {
     my ( $self, $c ) = @_;
 
-    $c->stash->{randpasswd} = Text::Password::Pronounceable->generate(6, 10);
+    my $randpass = new String::Random; 
+    $randpass->{'!'} = [ '!','@','#','$','%','^','&','*','?','_','~' ];
+    $c->stash->{randpasswd} = $randpass->randpattern("!CCncc!cCn");
     $c->forward('AuthStor::View::JSON');
 }
 
