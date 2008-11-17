@@ -9,7 +9,8 @@ style><![endif]--><!-- Curse you, IE! -->
     window.onload = focusit;
 </script>
 
-<div id="login"><h1><a href="http://www.authstor.org/" title="Powered by AuthStor">AuthStor.org</a></h1>
+<div id="login">
+<h1><a href='http://www.authstor.org'>AuthStor</a></h1>
 [% IF error_msg %]
 <div id="login_error">
 	<strong>ERROR</strong>: [% error_msg %].<br />
@@ -17,21 +18,24 @@ style><![endif]--><!-- Curse you, IE! -->
 [% END %]
 
 <form id="loginform" method="post" action=" [% Catalyst.uri_for('/login') %] ">
-	<p>
-		<label>Username:<br />
-		<input type="text" name="log" id="user_login" class="input" value="" size="20" tabindex="10" /></label>
-	</p>
-	<p>
-		<label>Password:<br />
-		<input type="password" name="pwd" id="user_pass" class="input" value="" size="20" tabindex="20" /></label>
-	</p>
-	<p><label><input name="rememberme" type="checkbox" id="rememberme" value="forever" tabindex="90" /> Remember me</label></p>
-	<p class="submit">
-		<input type="submit" id="submit" value="Login &raquo;" tabindex="100" />
-	</p>
+<fieldset>
+<div class='required'>
+<label for='user_login'>Username:</label>
+<input type="text" name="log" id="user_login" class="input" value="" size="20" tabindex="10" />
+</div>
+<div class='required'>
+<label for='user_pass'>Password:</label>
+<input type="password" name="pwd" id="user_pass" class="input" value="" size="20" tabindex="20" />
+</div>
+<label style='font-size:0.8em;' for='rememberme'>Remember Me</label>
+<input name="rememberme" type="checkbox" id="rememberme" value="forever" tabindex="90" />
+<p class="submit">
+<input type="submit" id="submit" value="Login &raquo;" tabindex="100" />
+</p>
 <ul>
-        <li><a href="http://www.authstor.org/login/lostpassword" title="Password Lost and Found">Lost your password?</a></li>
+<li><a href="http://www.authstor.org/login/lostpassword" title="Password Lost and Found">Lost your password?</a></li>
 </ul>
+</fieldset>
 </form>
 </div>
 

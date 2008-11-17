@@ -26,6 +26,18 @@ Catalyst Controller.
 
 =cut
 
+sub getParents($$) {
+  my ($c,$currentParent) = @_;
+  my @parents;
+  push(@parents, $currentParent);
+  while ($currentParent != 0){
+    $currentParent = $c->model('AuthStorDB::AuthGroup')->search({ group_id => $currentParent })->next
+->parent_id;
+    push(@parents, $currentParent);
+  }
+  return \@parents;
+}
+
 sub index : Private {
     my ( $self, $c ) = @_;
 
@@ -36,7 +48,10 @@ sub auth : Regex('^auth(\d+)$') {
     my ( $self, $c ) = @_;
 
     my $auth_id  = $c->request->snippets->[0];
+
     $c->stash->{auth_view} = $c->model('AuthStorDB::Auth')->search({auth_id => $auth_id})->next();
+
+    my $group =  $c->model('AuthStorDB::AuthGroup')->single({ group_id => $c->stash->{auth_view}->group_id });
 
     $ENV{'GNUPGHOME'} = $c->config->{gpgkeydir};
     my $gpg = new Crypt::GPG;
@@ -71,8 +86,8 @@ sub auth : Regex('^auth(\d+)$') {
     $c->stash->{tag_cloud} =  $cloud->html(50);
 
     #Treeview Root Nodes
-    $c->stash->{expandGroup} = $c->stash->{auth_view}->group_id;
-    $c->stash->{group} = $c->model('AuthStorDB::AuthGroup')->single({ group_id => $c->stash->{auth_view}->group_id });
+    $c->stash->{parents} = getParents($c, $group->parent_id);
+    $c->stash->{group} = $group;
 
     #Attachments
     $c->stash->{attachments} = $c->model('AuthStorDB::AuthAtt')->search({ auth_id => $auth_id },
@@ -269,6 +284,7 @@ sub add : Local {
     my ( $self, $c ) = @_;
 
     my $group_id =  $c->request->param('group_id');
+    my $group = $c->model('AuthStorDB::AuthGroup')->single({ group_id => $group_id });
 
     #Set-up for GPG
     $ENV{'GNUPGHOME'} = $c->config->{gpgkeydir};
@@ -304,9 +320,11 @@ sub add : Local {
       }
     }
 
-    #Treeview Root Nodes
-    $c->stash->{expandGroup} = $group_id;
-    $c->stash->{group} = $c->model('AuthStorDB::AuthGroup')->single({ group_id => $group_id });
+  #Treeview Root Nodes
+  if ($group){
+    $c->stash->{parents} = getParents($c, $group->parent_id);
+    $c->stash->{group} = $group;
+  }
     $c->stash->{groups} = $c->model('AuthStorDB::AuthGroup');
 
     $c->stash->{title} = 'Auth &rsaquo; Add';

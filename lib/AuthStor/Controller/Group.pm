@@ -23,15 +23,17 @@ Catalyst Controller.
 =cut
 
 sub getParents($$) {
-  my ($c,$currentParent) = @_; 
+  my ($c,$currentParent) = @_;
   my @parents;
   push(@parents, $currentParent);
   while ($currentParent != 0){
-    $currentParent = $c->model('AuthStorDB::AuthGroup')->search({ group_id => $currentParent })->next->parent_id;
+    $currentParent = $c->model('AuthStorDB::AuthGroup')->search({ group_id => $currentParent })->next
+->parent_id;
     push(@parents, $currentParent);
   }
   return \@parents;
 }
+
 
 sub index : Private {
     my ( $self, $c ) = @_;

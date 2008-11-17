@@ -247,6 +247,11 @@ function loadNodeData(node, fnLoadComplete)  {
 			    tempNode.expand();
 			  }
 			[% END %]
+			[% IF auth_view %]
+                         if(oResults.Nodes[i][1] == [% auth_view.group_id %]){
+                            tempNode.expand();
+                          }
+			[% END %]
                     } 
                 } else { 
                     //there is only one result; comes as string: 
