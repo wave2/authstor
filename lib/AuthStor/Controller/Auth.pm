@@ -73,7 +73,7 @@ sub auth : Regex('^auth(\d+)$') {
 
     # Tag Cloud
     my $cloud = HTML::TagCloud->new(levels=>5);
-    my $tags = $c->model('AuthStorDB::AuthTag')->search({},
+    my $tags = $c->model('AuthStorDB::AuthTag')->search({ auth_id => $auth_id },
     {
       join => 'tag',
       select => [ { count => '*' }, 'tag.tag_text' ],
@@ -154,7 +154,8 @@ sub edit : Regex('^auth(\d+)/edit$') {
         field_filters => { 
          tags => [qw/trim strip/],
         },
-        'required' => [ qw( name tags ) ],
+        optional => [ qw( tags )],
+        required => [ qw( name ) ],
       };
       my $results = Data::FormValidator->check($c->req->parameters, $dfv_profile);
       if ($results->has_invalid or $results->has_missing) {
@@ -262,7 +263,7 @@ sub edit : Regex('^auth(\d+)/edit$') {
       group_by => [qw/tag_text/]
     });
     while( my $tag=$tags->next() ) {
-      $cloud->add(lc($tag->get_column('tag_text')),$c->uri_for('/tag', lc($tag->get_column('tag_text'))), $tag->get_column('tagcount'));
+      $cloud->add(lc($tag->get_column('tag_text')),"javascript:addTag('".$tag->get_column('tag_text')."',document.forms['editAuthForm'].tags)", $tag->get_column('tagcount'));
     }
     $c->stash->{tag_cloud} =  $cloud->html(50);
 
@@ -299,7 +300,8 @@ sub add : Local {
         field_filters => {
          tags => [qw/trim strip/],
         },
-        'required' => [ qw( name ) ],
+        optional => [qw( tags ) ],
+        required => [ qw( name ) ],
       };
       my $results = Data::FormValidator->check($c->req->parameters, $dfv_profile);
       if ($results->has_invalid or $results->has_missing) {
@@ -313,10 +315,10 @@ sub add : Local {
        my $auth = $c->model('AuthStorDB::Auth')->create( { name => $c->request->parameters->{name}, uri => $c->request->parameters->{uri}, username => $c->request->parameters->{username}, password => $encryptedtext, group_id => $c->request->parameters->{group_id}, notes => $c->request->parameters->{notes} });
 
        #Add new tags
-       #foreach my $formtag (split('\s+',$results->valid('tags'))){
-         #my $newtag = $c->model('AuthStorDB::Tag')->find_or_create({ tag_text => $formtag });
-         #my $note = $c->model('AuthStorDB::AuthTag')->create({ auth_id => $auth_id, tag_id => $newtag->tag_id });
-       #}
+       foreach my $formtag (split('\s+',$results->valid('tags'))){
+         my $newtag = $c->model('AuthStorDB::Tag')->find_or_create({ tag_text => $formtag });
+         my $note = $c->model('AuthStorDB::AuthTag')->create({ auth_id => $auth->auth_id, tag_id => $newtag->tag_id });
+       }
       }
     }
 

@@ -14,8 +14,10 @@
 <p>URI: [% auth_view.uri %]</p>
 <p>Username: [% auth_view.username %]</p>
 <p>Password: [% auth_pass %]</p>
+[% IF tag_cloud %]
 <h2>Tags</h2>
 [% tag_cloud %]
+[% END %]
 <h2>Notes</h2>
 <p>[% auth_view.notes %]</p>
 <h2>Attachments</h2>

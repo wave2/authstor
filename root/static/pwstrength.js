@@ -179,3 +179,7 @@ function suggestPassword(pwField, baseUrl)
   };
   YAHOO.util.Connect.asyncRequest('GET',baseUrl + '/util/randpasswd', genCallBack);
 }
+
+function addTag(tagname, inputname) {
+  inputname.value += ' ' + tagname;
+}
