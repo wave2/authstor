@@ -83,6 +83,82 @@ sub user : Regex('^user(\d+)$') {
     $c->forward('AuthStor::View::TT');
 }
 
+sub editUser : Regex('^user(\d+)/edit$') {
+    my ( $self, $c ) = @_;
+
+    my $user_id  = $c->request->snippets->[0];
+    $c->stash->{user_view} = $c->model('AuthStorDB::User')->search({user_id => $user_id})->next;
+
+    #Form submission?
+    if ( defined($c->request->parameters->{form_submit}) ) {
+      #Check if this includes password reset - if it does we require all 3 fields (current, new and confirm)
+      my $dfv_profile ;
+      if ($c->request->parameters->{currentpass} || $c->request->parameters->{newpass} || $c->request->parameters->{confirmpass}){
+        $dfv_profile =
+        {
+          field_filters => {
+          tags => [qw/trim strip/],
+          },
+          optional => [ qw( firstname lastname)],
+          required => [ qw( currentpass newpass confirmpass username ) ],
+        };
+      }else{ 
+        $dfv_profile =
+        {
+          field_filters => {
+          tags => [qw/trim strip/],
+          },
+          optional => [ qw( firstname lastname)],
+          required => [ qw( username ) ],
+        };
+      }
+      my $results = Data::FormValidator->check($c->req->parameters, $dfv_profile);
+      if ($results->has_invalid or $results->has_missing) {
+
+        # do something with $results->invalid, $results->missing
+        $c->stash->{invalidform} = $results->msgs;
+
+      }else{
+
+        #Check passwords match
+        if (defined($c->request->parameters->{currentpass}) && ($c->request->parameters->{newpass} eq $c->request->parameters->{confirmpass})){
+
+          my $csh = Crypt::SaltedHash->new(algorithm => 'SHA-512');
+
+          #Did the user enter the correct current password?
+          if ($csh->validate($c->stash->{user_view}->password,$c->request->parameters->{currentpass})){ 
+
+            #Hash old password
+            my $csh = Crypt::SaltedHash->new(algorithm => 'SHA-512');
+            $csh->add($c->request->param('newpass'));
+            my $password = $csh->generate();
+
+            #Update the User
+            my $userpass = $c->model('AuthStorDB::User')->find($user_id)->update( { username => $c->request->parameters->{username}, first_name => $c->request->parameters->{firstname}, last_name => $c->request->parameters->{lastname}, password => $password });
+
+          }else{
+
+            $c->stash->{errormsg} = 'Please enter valid current password.';
+
+          }
+
+        } else {
+          my $user = $c->model('AuthStorDB::User')->find($user_id)->update( { username => $c->request->parameters->{username}, first_name => $c->request->parameters->{firstname}, last_name => $c->request->parameters->{lastname} });
+          $c->stash->{errormsg} = 'Passwords do not match - please try again.';
+        }
+      }
+    }
+
+    #Set-Up TreeView
+    $c->stash->{expandGroup} = 1;
+    $c->stash->{group} = $c->model('AuthStorDB::AuthGroup')->single({ parent_id => 0 });
+
+    $c->stash->{title} = 'User &rsaquo '.$c->stash->{user_view}->first_name.' '.$c->stash->{user_view}->last_name.' &rsaquo edit';
+    $c->stash->{template} = 'editUser.tt2';
+    $c->forward('AuthStor::View::TT');
+}
+
+
 
 =head1 AUTHOR
 

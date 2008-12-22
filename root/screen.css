@@ -257,6 +257,12 @@ div .required {
   padding-bottom: 2px;
 }
 
+div .errormsg {
+  color:red;
+  font-weight:bold;
+  padding-bottom: 8px;
+}
+
 /* Password Strength */
 .pwstrength {
     font: 0.8em/1.8em Tahoma, sans-serif;
