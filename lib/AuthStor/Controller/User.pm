@@ -120,8 +120,10 @@ sub editUser : Regex('^user(\d+)/edit$') {
 
       }else{
 
-        #Check passwords match
-        if (defined($c->request->parameters->{currentpass}) && ($c->request->parameters->{newpass} eq $c->request->parameters->{confirmpass})){
+        #Password Update?
+        if ($c->request->parameters->{currentpass}){
+
+         if ($c->request->parameters->{newpass} eq $c->request->parameters->{confirmpass}){
 
           my $csh = Crypt::SaltedHash->new(algorithm => 'SHA-512');
 
@@ -136,18 +138,25 @@ sub editUser : Regex('^user(\d+)/edit$') {
             #Update the User
             my $userpass = $c->model('AuthStorDB::User')->find($user_id)->update( { username => $c->request->parameters->{username}, first_name => $c->request->parameters->{firstname}, last_name => $c->request->parameters->{lastname}, password => $password });
 
+            $c->stash->{usererr} = 'User updated successfully';
+            $c->stash->{passworderr} = 'Password updated successfully';
+
           }else{
-
-            $c->stash->{errormsg} = 'Please enter valid current password.';
-
+            $c->stash->{passworderr} = 'Please enter valid current password.';
+          }
+          }else{
+            $c->stash->{passworderr} = 'Passwords do not match';
           }
 
         } else {
           my $user = $c->model('AuthStorDB::User')->find($user_id)->update( { username => $c->request->parameters->{username}, first_name => $c->request->parameters->{firstname}, last_name => $c->request->parameters->{lastname} });
-          $c->stash->{errormsg} = 'Passwords do not match - please try again.';
+          $c->stash->{usererr} = 'User updated successfully';
         }
       }
     }
+
+    #Get current user details
+    $c->stash->{user_view} = $c->model('AuthStorDB::User')->search({user_id => $user_id})->next;
 
     #Set-Up TreeView
     $c->stash->{expandGroup} = 1;

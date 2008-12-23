@@ -195,7 +195,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
-INSERT INTO users (user_id,username,password) VALUES (0,'admin','{SSHA512}zgBFr+94mwysN+IfFQYGmuxKAuoo/iDcdwe7nnMARYb2hkguNA2WqUWEmqwOBzEHVpsA6hoAOgH7Xq2ysSEUYqNNAVw=');
+INSERT INTO users (user_id,username,password,first_name, last_name) VALUES (0,'admin','{SSHA512}zgBFr+94mwysN+IfFQYGmuxKAuoo/iDcdwe7nnMARYb2hkguNA2WqUWEmqwOBzEHVpsA6hoAOgH7Xq2ysSEUYqNNAVw=','AuthStor','Admin');
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

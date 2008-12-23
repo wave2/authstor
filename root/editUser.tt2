@@ -14,6 +14,11 @@
 <form id='editUserForm' action="[% post_uri %]" method="post" enctype="multipart/form-data">
 <fieldset>
 <h1>[% user_view.first_name %] [% user_view.last_name %]</h1>
+<div class='errormsg'>
+[% IF usererr %]
+  [% usererr %]
+[% END %]
+</div>
 <div class='required'>
 <label for='username'>Username:</label>
 <input type="text" name="username" id="username" size='22' maxlength='100' value='[% user_view.username %]' />
@@ -28,8 +33,8 @@
 </div>
 <h2>Change Password</h2>
 <div class='errormsg'>
-[% IF errormsg %]
-  [% errormsg %]
+[% IF passworderr %]
+  [% passworderr %]
 [% END %]
 </div>
 <div class='required'>
