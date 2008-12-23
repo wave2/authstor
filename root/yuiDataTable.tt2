@@ -1,11 +1,13 @@
 <!--CSS file (default YUI Sam Skin) -->
 <link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/2.6.0/build/datatable/assets/skins/sam/datatable.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.6.0/build/paginator/assets/skins/sam/paginator.css">
 
 <!-- Dependencies -->
-<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/datasource/datasource-beta-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/paginator/paginator-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/datasource/datasource-min.js"></script>
 
 <!-- OPTIONAL: Drag Drop (enables resizeable columns) -->
 <script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/dragdrop/dragdrop-min.js"></script>
 
 <!-- Source files -->
-<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/datatable/datatable-beta-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/datatable/datatable-min.js"></script>

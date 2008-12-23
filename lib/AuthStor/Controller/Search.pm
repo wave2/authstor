@@ -25,7 +25,7 @@ sub index : Private {
     my ( $self, $c ) = @_;
 
     my $query = $c->request->params->{query} || "";
-    $c->stash->{search_results} = $c->model('AuthStorDB::Auth')->search({name => { 'like', "%$query%" }});
+    $c->stash->{search_results} = $c->model('AuthStorDB::Auth')->search({status => 1, name => { 'like', "%$query%" }});
     $c->stash->{groups} = [$c->model('AuthStorDB::AuthGroup')->search({ parent_id => 0 })];
     $c->stash->{search_title} = 'Search Results for ' . $query;
     $c->stash->{template} = 'searchResults.tt2';

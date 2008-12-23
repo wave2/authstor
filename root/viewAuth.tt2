@@ -23,7 +23,7 @@
 <h2>Attachments</h2>
 <table>
 [% WHILE (attachment=attachments.next) -%]
-<tr><td><a href="[% base %]auth[% auth_view.auth_id %]/att[% attachment.get_column('att_id') %]">[% attachment.get_column('filename') %]</a></td></tr>
+<tr><td class='attachments'><a href="[% base %]auth[% auth_view.auth_id %]/att[% attachment.get_column('att_id') %]">[% attachment.get_column('filename') %]</a></td></tr>
 [% END -%]
 </table>
 <hr />

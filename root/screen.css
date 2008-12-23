@@ -2,11 +2,23 @@ html {
   height: 100%;
 }
 
+.attachments a {
+  color: #ffffff;
+}
+
 body {
     border: none;
     background-color:#222D2D;
     padding: 10px;
     min-width: 640px;
+}
+
+td a {
+  color: #0066CC;
+}
+
+a {
+  color: #ffffff;
 }
 
 a.delete:hover {
@@ -299,4 +311,12 @@ span.tagcloud5 a {text-decoration: none; color: #fff;}
 
 #footer a img {
   border: none;
+}
+
+.yui-skin-sam .yui-pg-container {
+  color: #ffffff;
+}
+
+.yui-skin-sam .yui-dt td {
+  color: #000000;
 }
