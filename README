@@ -1,1 +1,12 @@
+Install OpenSolaris 2008.11
+pkg install SUNWgcc
+pkg install ss-dev
+pkg install SUNWmysql5
+
+perl -MCPAN -e 'shell'
+install Bundle::CPAN
+install Module::Install
+
+grant all privileges on authstor.* to authuser@localhost identified by 'authpass';
+
 Run script/authstor_server.pl to test the application.
