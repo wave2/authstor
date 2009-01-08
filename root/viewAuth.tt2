@@ -1,5 +1,6 @@
 [% PROCESS head.tt2 -%]
 <body class='yui-skin-sam'>
+<script type="text/javascript" src="/static/pwstrength.js"></script>
 [% PROCESS yuiCommon.tt2 -%]
 [% PROCESS yuiTreeView.tt2 -%]
 [% PROCESS yuiButton.tt2 -%]
@@ -14,7 +15,13 @@
 <p>URI: [% auth_view.uri %]</p>
 <p>Username: [% auth_view.username %]</p>
 <p>Last Modified: [% auth_view.modified %]</p>
-<p>Password: [% auth_pass %]</p>
+
+<form id='editAuthForm' action="[% post_uri %]" method="post" enctype="multipart/form-data">
+<fieldset>
+<div class='optional'>
+<label for='password'>Password:</label>
+<input type="text" name="password" id="password" size='22' maxlength='100' value='**********'  onkeyup="runPassword(this.value, 'password');" /><button onclick="hidePassword(document.forms['editAuthForm'].password, '[% base %]');" id="genPassButton" type="button" style="font-size:10pt">Hide Password</button><button onclick="showPassword(document.forms['editAuthForm'].password, '[% base %]', '[% auth_pass %]');" id="genPassButton" type="button" style="font-size:10pt">Show Password</button>
+</fieldset>
 
 <input type='button' id="updateServerButton" name="updateServerButton" value="Update Server">
 [% IF tag_cloud %]

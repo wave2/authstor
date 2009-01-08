@@ -10,7 +10,7 @@ style><![endif]--><!-- Curse you, IE! -->
 </script>
 
 <div id="login">
-<h1><a href='http://www.authstor.org'>AuthStor</a></h1>
+<h1><a href='[% base %]'>AuthStor</a></h1>
 [% IF error_msg %]
 <div id="login_error">
 	<strong>ERROR</strong>: [% error_msg %].<br />
@@ -33,7 +33,7 @@ style><![endif]--><!-- Curse you, IE! -->
 <input type="submit" id="submit" value="Login &raquo;" tabindex="100" />
 </p>
 <ul>
-<li><a href="http://www.authstor.org/login/lostpassword" title="Password Lost and Found">Lost your password?</a></li>
+<li><a href="[% base %]/login/lostpassword" title="Password Lost and Found">Lost your password?</a></li>
 </ul>
 </fieldset>
 </form>
