@@ -13,7 +13,10 @@
 <h1>[% auth_view.name %]</h1>
 <p>URI: [% auth_view.uri %]</p>
 <p>Username: [% auth_view.username %]</p>
+<p>Last Modified: [% auth_view.modified %]</p>
 <p>Password: [% auth_pass %]</p>
+
+<input type='button' id="updateServerButton" name="updateServerButton" value="Update Server">
 [% IF tag_cloud %]
 <h2>Tags</h2>
 [% tag_cloud %]
@@ -30,6 +33,9 @@
 <input type='button' id="editButton" name="editButton" value="Edit">
 <input type='button' id="deleteButton" name="deleteButton" value="Delete">
 <script type='text/javascript'>
+  var updateServerButton = new YAHOO.widget.Button("updateServerButton");
+  updateServerButton.addListener("click",function(){window.location.href = "[% base %]/updateserver"});
+
   var editButton = new YAHOO.widget.Button("editButton");
   editButton.addListener("click",function(){window.location.href = "[% base %]/auth[% auth_view.auth_id %]/edit"});
   var deleteButton = new YAHOO.widget.Button("deleteButton"); 
