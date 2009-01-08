@@ -47,7 +47,7 @@ YAHOO.util.Event.onDOMReady(function () {
 
         { text: "Help", submenu: {  id: "helpmenu", itemdata: [
                 { text: "AuthStor Help", helptext: "Ctrl + H" },
-                { text: "About" },
+                { text: "About", onclick: { fn: about } },
             ] }
         },
     ];
