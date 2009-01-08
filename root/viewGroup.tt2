@@ -18,7 +18,7 @@
 <input type='button' id="deleteButton" name="deleteButton" value="Delete">
 <script type='text/javascript'>
   var editButton = new YAHOO.widget.Button("editButton");
-  editButton.addListener("click",function(){window.location.href = "http://www.authstor.org/group[% group_view.group_id %]/edit"});
+  editButton.addListener("click",function(){window.location.href = "[% base %]/group[% group_view.group_id %]/edit"});
   var deleteButton = new YAHOO.widget.Button("deleteButton"); 
 
   var deleteDialog = new YAHOO.widget.SimpleDialog("deleteDialog", { 

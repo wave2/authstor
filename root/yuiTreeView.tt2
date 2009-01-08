@@ -13,6 +13,7 @@ YAHOO.util.Event.onDOMReady(function () {
         { text: "File", submenu: {  id: "filemenu", itemdata: [
                 { text: "New Auth", helptext: "Ctrl + N", onclick: { fn: addAuth } },
 		{ text: "New Group", onclick: { fn: addGroup } },
+		{ text: "New User", onclick: { fn: addUser } },
                 { text: "Logout", helptext: "Ctrl + O", onclick: { fn: logout } }
             ] }
         },
@@ -82,6 +83,9 @@ var tree;
 
         //Fire an event when the label is clicked: 
         tree.subscribe("labelClick", function(node) { 
+	  if (node.data.container == true){
+            window.location.href = "[% base %]group" + node.data.id;
+          }
           if (node.data.container == false){
             window.location.href = "[% base %]auth" + node.data.id;
           }
@@ -167,6 +171,14 @@ function deleteAuth() {
 
 function editAuth() {
     window.location.href = "[% base %]auth" + oTextNodeMap[oCurrentTextNode.id].data.id + "/edit";
+}
+
+function addUser() {
+   window.location.href = "[% base %]user/add";
+}
+
+function about() {
+   window.location.href = "[% base %]about";
 }
 
 function logout() {
