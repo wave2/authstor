@@ -101,12 +101,12 @@ sub delete : Regex('^group(\d+)/delete$') {
     #Check for child groups
     if ($c->model('AuthStorDB::AuthGroup')->count({parent_id => $group_id})) {
       #found child groups
-      $c->stash->{error_msg} = $c->model('AuthStorDB::AuthGroup')->count({parent_id => $group_id}).'group';
+      $c->stash->{error_msg} = $c->model('AuthStorDB::AuthGroup')->count({parent_id => $group_id}).' Group exists below this group - cannot delete';
     }else{
       #No child groups.  Check for Auths
-      if ($c->model('AuthStorDB::Auth')->count({group_id => $group_id})) {
+      if ($c->model('AuthStorDB::Auth')->count({group_id => $group_id, status => 1})) {
         #Auths found in group
-        $c->stash->{error_msg} = $c->model('AuthStorDB::Auth')->count({group_id => $group_id}).'auth';
+        $c->stash->{error_msg} = $c->model('AuthStorDB::Auth')->count({group_id => $group_id}).' Auth exists this group - cannot delete';
       }else{
         #No Auths - lets delete this group
         $c->model('AuthStorDB::AuthGroup')->find({group_id => $group_id})->delete;

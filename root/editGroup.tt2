@@ -12,11 +12,11 @@
 <div id='content'>
 <form action="[% post_uri %]" method="post" enctype="multipart/form-data">
 <h1>Edit Group [% group.name %]</h1>
+<div class='errormsg'>
 [% IF error_msg %]
-<div id="login_error">
-  <strong>ERROR</strong>: [% error_msg %].<br />
-</div>
+  [% error_msg %]
 [% END %]
+</div>
 <table>
 <tr><td><p>Parent:</p></td><td><select id='parent_id' name='parent_id'>
 [% WHILE (parent=groups.next) -%]

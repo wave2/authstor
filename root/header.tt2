@@ -5,7 +5,8 @@
 <div id='search'>
 <form action="/search" method="post">
 <table>
-<tr><td style='text-align: right;font-size: 0.82em; '><a style='color:#fff;' href='[% base %]user[% c.user.user_id %]/edit'>[% c.user.first_name %] [% c.user.last_name %]</a> <a style='color:#fff;' href='/logout'>Logout</a></td></tr>
+<tr><td style='text-align: right;font-size: 0.82em; '>
+<a style='color:#fff;' href='[% base %]user[% c.user.user_id %]/edit'>[% IF c.user.first_name != '' %][% c.user.first_name %] [% c.user.last_name %][% ELSE %][% c.user.username %][% END %]</a> <a style='color:#fff;' href='/logout'>Logout</a></td></tr>
 <tr><td>Search:  <input type='text' name='query' size='32' maxlength='255' title="Search"></td></tr>
 </table>
 </form>
