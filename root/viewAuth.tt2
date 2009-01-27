@@ -41,7 +41,7 @@
 <input type='button' id="deleteButton" name="deleteButton" value="Delete">
 <script type='text/javascript'>
   var updateServerButton = new YAHOO.widget.Button("updateServerButton");
-  updateServerButton.addListener("click",function(){window.location.href = "[% base %]/updateserver"});
+  updateServerButton.addListener("click",function(){window.location.href = "[% base %]/auth[% auth_view.auth_id %]/updateserver"});
 
   var editButton = new YAHOO.widget.Button("editButton");
   editButton.addListener("click",function(){window.location.href = "[% base %]/auth[% auth_view.auth_id %]/edit"});
