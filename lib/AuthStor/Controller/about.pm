@@ -49,7 +49,7 @@ sub index :Path :Args(0) {
 
 =head1 AUTHOR
 
-A clever guy
+Raul S Lasluisa
 
 =head1 LICENSE
 

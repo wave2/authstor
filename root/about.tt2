@@ -10,9 +10,10 @@
 </div>
 <div id='content'>
 <h1>About </h1>
-<p>Revision 182</p>
+<p>Revision 190</p>
 <p>Feturing being devolped and bugs fixed:</p>
-<p>Hide show password button and fix some links</p>
+<p>Added two new columns to auths table:</p>
+<p>last_server_update and updating_server</p>
 
 </div>
 </div>

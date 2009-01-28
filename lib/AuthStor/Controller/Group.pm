@@ -110,7 +110,8 @@ sub delete : Regex('^group(\d+)/delete$') {
       }else{
         #No Auths - lets delete this group
         $c->model('AuthStorDB::AuthGroup')->find({group_id => $group_id})->delete;
-        $c->response->redirect($c->request->headers->referer);
+       # $c->response->redirect($c->request->headers->referer);
+	$c->response->redirect($c->uri_for('/dashboard'));
         return 1;
       }
     } 
