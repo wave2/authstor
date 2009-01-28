@@ -10,10 +10,10 @@
 </div>
 <div id='content'>
 <h1>About </h1>
-<p>Revision 190</p>
+<p>Revision 191</p>
 <p>Feturing being devolped and bugs fixed:</p>
-<p>Added two new columns to auths table:</p>
-<p>last_server_update and updating_server</p>
+<p>-Can now see last server update when viewing an auth entry</p>
+<p>-Hide update server button when server is updating and warn the user</p>
 
 </div>
 </div>
