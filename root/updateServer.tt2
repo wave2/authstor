@@ -4,14 +4,34 @@
 [% PROCESS yuiTreeView.tt2 -%]
 [% PROCESS header.tt2 -%]
 <div id='container'>
-<div id='sidebar'>
-  <div id='menubarDiv'></div>
-  <div id='treeDiv'></div>
-</div>
-<div id='content'>
-<h1>Update Server </h1>
-<p>Under Construction</p>
+	<div id='sidebar'>
+  		<div id='menubarDiv'></div>
+  		<div id='treeDiv'></div>
+	</div>
+	<div id='content'>
+		[% IF auth_view.updating_server %]
+			<h1>Update Server </h1>
+			<center><b><font size="5" color="red"> Server is currently updating.</font></b></center>
+			<p> Please wait until this is finished before trying to update your server password again. </p>
+		[% ELSE %]
+			<h1>Update Server </h1>
+			<p>Under Construction</p>
+			<h1>[% auth_view.name %]</h1>
+			<p>URI: [% auth_view.uri %]</p>
+			<p>Username: [% auth_view.username %]</p>
+			<p>Last Modified: [% auth_view.modified %]</p>
+			<p>Last Server Update: [% auth_view.last_server_update %]</p>
+			<p>Password: [% auth_pass %]</p>
 
-</div>
+			<form id='updateServer' action="[% post_uri %]" method="post" enctype="multipart/form-data">
+				<fieldset>
+					<div class='required'>
+						<label for='serverType'>Server Type:</label>
+						<input type="text" name="serverType" id="serverType" size='22' maxlength='100' value='' />
+					</div>
+				</fieldset>
+			</form>
+		[% END %]
+	</div>
 </div>
 [% PROCESS footer.tt2 -%]

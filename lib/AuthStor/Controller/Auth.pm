@@ -343,8 +343,27 @@ sub add : Local {
 sub updateserver : Regex('^auth(\d+)/updateserver$') {
     my ( $self, $c ) = @_;
 
-    $c->stash->{expandGroup} = 0;
-    $c->stash->{group} = $c->model('AuthStorDB::AuthGroup')->single({ parent_id => 0 });
+#Retrieve all Auth info and stash for use
+    my $auth_id  = $c->request->snippets->[0];
+    $c->stash->{auth_view} = $c->model('AuthStorDB::Auth')->search({auth_id => $auth_id})->next();
+
+    my $group =  $c->model('AuthStorDB::AuthGroup')->single({ group_id => $c->stash->{auth_view}->group_id });
+
+#Set-up for GPG
+    $ENV{'GNUPGHOME'} = $c->config->{gpgkeydir};
+    my $gpg = new Crypt::GPG;
+    $gpg->secretkey($c->config->{gpgkeyid});
+    $gpg->passphrase($c->config->{gpgkeypass});
+
+#Unencrypt Auth password
+    my ($plaintext, $signature) = $gpg->verify($c->stash->{auth_view}->get_column('password'));
+    $c->stash->{auth_pass} = $plaintext;
+
+
+
+
+
+
     # Tag Cloud
     my $cloud = HTML::TagCloud->new(levels=>5);
     my $tags = $c->model('AuthStorDB::AuthTag')->search({},
