@@ -29,6 +29,10 @@
 						<label for='serverType'>Server Type:</label>
 						<input type="text" name="serverType" id="serverType" size='22' maxlength='100' value='' />
 					</div>
+					<select>
+						<option>Linux</option>
+						<option>MySQL</option>
+					</select>
 				</fieldset>
 			</form>
 		[% END %]
