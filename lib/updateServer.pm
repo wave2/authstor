@@ -2,21 +2,6 @@
 use strict;
 package updateServer;
 
-sub mean {
-	my (@data) = @_;
-	my $sum;
-	$sum += $_ foreach(@data);
-	return @data ? ($sum / @data) : 0;
-}
-
-sub median {
-	my (@data)=sort { $a <=> $b} @_;
-	if (scalar(@data) % 2) {
-		return($data[@data /2]);
-	}
-	return(mean($data[@data /2],
-		$data[@data / 2 -1]));
-}
 sub mysqlUpdate {
 
         my (@data) = @_;
