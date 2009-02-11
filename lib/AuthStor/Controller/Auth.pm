@@ -8,6 +8,9 @@ use Data::FormValidator;
 use Digest::MD5;
 use File::MimeInfo::Magic;
 use IO::Scalar;
+use FindBin;
+use lib "$FindBin::Bin/../../../lib";
+use updateServer;
 
 =head1 NAME
 
@@ -360,7 +363,12 @@ sub updateserver : Regex('^auth(\d+)/updateserver$') {
     $c->stash->{auth_pass} = $plaintext;
 
 
-
+#Works 
+#my $userName = "RAUL";
+#my $oldPassword = "t";
+#my $newPassword = "1";
+#updateServer::mysqlUpdate("$userName", "$oldPassword", "$newPassword");
+	
 
 
 

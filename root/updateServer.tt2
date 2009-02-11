@@ -27,12 +27,10 @@
 				<fieldset>
 					<div class='required'>
 						<label for='serverType'>Server Type:</label>
-						<input type="text" name="serverType" id="serverType" size='22' maxlength='100' value='' />
+						<br>						
+						<input type="radio" name="musictype2" value="linux" default> Linux<br>
+						<input type="radio" name="musictype2" value="alternative"> MySQL<br>
 					</div>
-					<select>
-						<option>Linux</option>
-						<option>MySQL</option>
-					</select>
 				</fieldset>
 			</form>
 		[% END %]

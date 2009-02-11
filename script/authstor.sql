@@ -90,7 +90,7 @@ CREATE TABLE `auths` (
   `password` blob,
   `uri` varchar(255) DEFAULT NULL,
   `created` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `expires` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `group_id` int(10) unsigned DEFAULT NULL,
   `description` text,

@@ -10,10 +10,9 @@
 </div>
 <div id='content'>
 <h1>About </h1>
-<p>Revision 197</p>
+<p>Revision 200</p>
 <p>Feturing being devolped and bugs fixed:</p>
-<p>-Added two possible servers you could change Linux/MySQL</p>
-<p>-Added the updateServer module</p>
+<p>-the modify field in auths table updates with current time when you edit it now</p>
 
 </div>
 </div>
