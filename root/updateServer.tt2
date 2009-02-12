@@ -28,9 +28,15 @@
 					<div class='required'>
 						<label for='serverType'>Server Type:</label>
 						<br>						
-						<input type="radio" name="musictype2" value="linux" default> Linux<br>
-						<input type="radio" name="musictype2" value="alternative"> MySQL<br>
+						<input type="radio" name="servertype" value="linux" default> Linux<br>
+						<input type="radio" name="servertype" value="mysql"> MySQL<br>
 					</div>
+					<input id="submitButton" type="submit" name="submitButton" value="Update [% auth_view.username %]">
+					<script type='text/javascript'>
+						var oPushButton1 = new YAHOO.widget.Button("submitButton");
+					</script>
+					<input type="hidden" name="form_submit" value="yes">
+
 				</fieldset>
 			</form>
 		[% END %]

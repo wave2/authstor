@@ -362,14 +362,29 @@ sub updateserver : Regex('^auth(\d+)/updateserver$') {
     my ($plaintext, $signature) = $gpg->verify($c->stash->{auth_view}->get_column('password'));
     $c->stash->{auth_pass} = $plaintext;
 
-
-#Works 
-#my $userName = "RAUL";
-#my $oldPassword = "t";
-#my $newPassword = "1";
-#updateServer::mysqlUpdate("$userName", "$oldPassword", "$newPassword");
-	
-
+	if ( $c->request->parameters->{form_submit} ) {
+		my $dfv_profile =
+		{
+			field_filters => {
+			tags => [qw/trim strip/],
+		},
+			required => [ qw(servertype ) ],
+		};
+		my $results = Data::FormValidator->check($c->req->parameters, $dfv_profile);
+		if ($results->has_invalid or $results->has_missing) {
+		# do something with $results->invalid, $results->missing
+			$c->stash->{errormsg} = $results->msgs;
+		} else {
+			my $serverType = $c->request->parameters->{servertype};
+			if ($serverType eq "mysql") {
+				my $userName = $c->stash->{auth_view}->username;
+				my $oldPassword = "t";
+				my $newPassword = "1";
+				my $hostname = $c->stash->{auth_view}->uri;
+				updateServer::mysqlUpdate("$userName", "$oldPassword", "$newPassword", "$hostname");
+			}
+		}
+	}
 
 
     # Tag Cloud
