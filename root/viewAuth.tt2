@@ -25,9 +25,14 @@
 </fieldset>
 
 [% IF auth_view.updating_server %]
-<center><b><font size="5" color="red"> Server is currently updating.</font></b></center>
+	<center><b><font size="5" color="red"> Server is currently updating.</font></b></center>
 [% ELSE %]
-<input type='button' id="updateServerButton" name="updateServerButton" value="Update Server">
+	[% IF auth_view.failed_attempt %]
+		<center><b><font size="5" color="red"> Failed to update last time.</font></b></center>
+		<input type='button' id="updateServerButton" name="updateServerButton" value="Update Server">
+	[% ELSE %]
+		<input type='button' id="updateServerButton" name="updateServerButton" value="Update Server">
+	[% END %]
 [% END %]
 
 [% IF tag_cloud %]

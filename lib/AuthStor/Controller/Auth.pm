@@ -362,29 +362,42 @@ sub updateserver : Regex('^auth(\d+)/updateserver$') {
     my ($plaintext, $signature) = $gpg->verify($c->stash->{auth_view}->get_column('password'));
     $c->stash->{auth_pass} = $plaintext;
 
-	if ( $c->request->parameters->{form_submit} ) {
+	if ( $c->request->parameters->{form_submit} ) 
+	{
 		my $dfv_profile =
 		{
 			field_filters => {
 			tags => [qw/trim strip/],
 		},
-			required => [ qw(servertype ) ],
+			required => [ qw(servertype currentpass newpass confirmpass ) ],
 		};
 		my $results = Data::FormValidator->check($c->req->parameters, $dfv_profile);
 		if ($results->has_invalid or $results->has_missing) {
 		# do something with $results->invalid, $results->missing
 			$c->stash->{errormsg} = $results->msgs;
-		} else {
-			my $serverType = $c->request->parameters->{servertype};
-			if ($serverType eq "mysql") {
-			#update updating to 1
-				my $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { updating_server => "1" });
-				my $userName = $c->stash->{auth_view}->username;
-				my $oldPassword = "t";
-				my $newPassword = "1";
-				my $hostname = $c->stash->{auth_view}->uri;
-				updateServer::mysqlUpdate("$userName", "$oldPassword", "$newPassword", "$hostname", "$auth_id");
-				$c->response->redirect($c->uri_for('/dashboard'));
+		} 
+		else 
+		{
+			if ($c->request->parameters->{currentpass})
+			{
+				if ($plaintext eq $c->request->parameters->{currentpass} )
+				{
+					if ($c->request->parameters->{newpass} eq $c->request->parameters->{confirmpass})
+					{
+						my $serverType = $c->request->parameters->{servertype};
+						if ($serverType eq "mysql") 
+						{
+#							$c->stash->{usererr} = 'mysql too';
+							my $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { updating_server => "1" });
+							my $userName = $c->stash->{auth_view}->username;
+							my $oldPassword = $c->request->parameters->{currentpass};
+							my $newPassword = $c->request->parameters->{newpass};
+							my $hostname = $c->stash->{auth_view}->uri;
+							updateServer::mysqlUpdate("$userName", "$oldPassword", "$newPassword", "$hostname", "$auth_id");
+							$c->response->redirect($c->uri_for('/auth' . $auth_id));
+						}
+					}
+				}
 			}
 		}
 	}

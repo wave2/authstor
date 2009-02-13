@@ -14,6 +14,11 @@
 			<center><b><font size="5" color="red"> Server is currently updating.</font></b></center>
 			<p> Please wait until this is finished before trying to update your server password again. </p>
 		[% ELSE %]
+<div class='errormsg'>
+[% IF usererr %]
+  [% usererr %]
+[% END %]
+</div>
 			<h1>Update Server </h1>
 			<p>Under Construction</p>
 			<h1>[% auth_view.name %]</h1>
@@ -31,6 +36,40 @@
 						<input type="radio" name="servertype" value="linux" default> Linux<br>
 						<input type="radio" name="servertype" value="mysql"> MySQL<br>
 					</div>
+
+
+<div class='required'>
+<label for='currentpass' style='width:200px;'>Current Password:</label>
+[% IF invalidform.currentpass %]
+<input type="password" name="currentpass" id="currentpass" size='22' maxlength='100' value='' /> [% invalidform.currentpass %]
+[% ELSE %]
+<input type="password" name="currentpass" id="currentpass" size='22' maxlength='100' value='' />
+[% END %]
+</div>
+<div class='optional'>
+<label for='newpass' style='width:200px;'>New Password:</label>
+[% IF invalidform.newpass %]
+<input type="password" name="newpass" id="newpass" size='22' maxlength='100' value='[% user_pass %]'  onkeyup="runPassword(this.value, 'newpass');" /> [% invalidform.newpass %]
+[% ELSE %]
+<input type="password" name="newpass" id="newpass" size='22' maxlength='100' value='[% user_pass %]'  onkeyup="runPassword(this.value, 'newpass');" />
+[% END %]
+</div>
+<div class='optional'>
+<label for='confirmpass' style='width:200px;'>Confirm New Password:</label>
+[% IF invalidform.confirmpass %]
+<input type="password" name="confirmpass" id="confirmpass" size='22' maxlength='100' value='' /> [% invalidform.confirmpass %]
+[% ELSE %]
+<input type="password" name="confirmpass" id="confirmpass" size='22' maxlength='100' value='' />
+[% END %]
+</div>
+
+
+
+					<br>
+
+
+
+					
 					<input id="submitButton" type="submit" name="submitButton" value="Update [% auth_view.username %]">
 					<script type='text/javascript'>
 						var oPushButton1 = new YAHOO.widget.Button("submitButton");

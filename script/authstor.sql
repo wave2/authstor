@@ -99,6 +99,7 @@ CREATE TABLE `auths` (
   `status` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `last_server_update` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updating_server` int(1) unsigned NOT NULL DEFAULT '0',
+  `failed_attempt` int(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`auth_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
