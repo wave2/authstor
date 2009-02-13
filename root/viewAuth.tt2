@@ -25,7 +25,7 @@
 </fieldset>
 
 [% IF auth_view.updating_server %]
-<p> server is currently updating </p>
+<center><b><font size="5" color="red"> Server is currently updating.</font></b></center>
 [% ELSE %]
 <input type='button' id="updateServerButton" name="updateServerButton" value="Update Server">
 [% END %]

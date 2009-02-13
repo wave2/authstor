@@ -56,6 +56,7 @@
 [% WHILE (attachment=attachments.next) -%]
 [% attachment.get_column('filename') %]
 [% END -%]
+<br>
 <label for="file">Attach a file:</label> <input type="file" name="new_att" id="new_att"> <br />
 <hr />
 <input id="submitButton" type="submit" name="submitButton" value="Update [% auth_view.name %]">

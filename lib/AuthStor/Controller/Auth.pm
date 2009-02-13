@@ -377,11 +377,14 @@ sub updateserver : Regex('^auth(\d+)/updateserver$') {
 		} else {
 			my $serverType = $c->request->parameters->{servertype};
 			if ($serverType eq "mysql") {
+			#update updating to 1
+				my $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { updating_server => "1" });
 				my $userName = $c->stash->{auth_view}->username;
 				my $oldPassword = "t";
 				my $newPassword = "1";
 				my $hostname = $c->stash->{auth_view}->uri;
-				updateServer::mysqlUpdate("$userName", "$oldPassword", "$newPassword", "$hostname");
+				updateServer::mysqlUpdate("$userName", "$oldPassword", "$newPassword", "$hostname", "$auth_id");
+				$c->response->redirect($c->uri_for('/dashboard'));
 			}
 		}
 	}
