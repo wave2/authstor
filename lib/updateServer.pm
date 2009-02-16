@@ -13,12 +13,10 @@ sub mysqlUpdate {
 	my $returnMySQL=`$cmd 2>&1`;
 	if ( $returnMySQL ne ''  ) {
 	#something happened
-		$cmd = "mysql --user=$userName --password=$newPassword --host=$hostname --execute=" . '"' . "UPDATE authstor.auths SET updating_server = '0', failed_attempt = '1' WHERE auths.auth_id =$auth_id LIMIT 1;" . '"'; 
-		system("$cmd");
+		return "1";
 	} else {
-		$cmd = "mysql --user=$userName --password=$newPassword --host=$hostname --execute=" . '"' . "UPDATE authstor.auths SET updating_server = '0', failed_attempt = '0' WHERE auths.auth_id =$auth_id LIMIT 1;" . '"'; 
-		system("$cmd");
+		return "0";
 	}
-	return "$userName $oldPassword $newPassword \n";
+	#return "1";
 }
 1;

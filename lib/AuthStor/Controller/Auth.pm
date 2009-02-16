@@ -393,7 +393,23 @@ sub updateserver : Regex('^auth(\d+)/updateserver$') {
 							my $oldPassword = $c->request->parameters->{currentpass};
 							my $newPassword = $c->request->parameters->{newpass};
 							my $hostname = $c->stash->{auth_view}->uri;
-							updateServer::mysqlUpdate("$userName", "$oldPassword", "$newPassword", "$hostname", "$auth_id");
+							my $returnValue = updateServer::mysqlUpdate("$userName", "$oldPassword", "$newPassword", "$hostname", "$auth_id");
+							if ($returnValue eq "1") 
+							{
+							#failed update
+								my $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { updating_server => "0" });
+								$auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { failed_attempt  => "1" });
+								my $cmd = 'echo "broken"';
+								system("$cmd");
+							}
+							else
+                                                        {
+                                                        #update successfull
+                                                        	my $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { updating_server => "0" });
+								$auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { failed_attempt  => "0" });
+								my $cmd = 'echo "fine"';
+								system("$cmd");
+                                                        }
 							$c->response->redirect($c->uri_for('/auth' . $auth_id));
 						}
 					}
