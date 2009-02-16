@@ -387,7 +387,6 @@ sub updateserver : Regex('^auth(\d+)/updateserver$') {
 						my $serverType = $c->request->parameters->{servertype};
 						if ($serverType eq "mysql") 
 						{
-#							$c->stash->{usererr} = 'mysql too';
 							my $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { updating_server => "1" });
 							my $userName = $c->stash->{auth_view}->username;
 							my $oldPassword = $c->request->parameters->{currentpass};
@@ -399,21 +398,38 @@ sub updateserver : Regex('^auth(\d+)/updateserver$') {
 							#failed update
 								my $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { updating_server => "0" });
 								$auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { failed_attempt  => "1" });
-								my $cmd = 'echo "broken"';
-								system("$cmd");
 							}
 							else
                                                         {
                                                         #update successfull
                                                         	my $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { updating_server => "0" });
 								$auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { failed_attempt  => "0" });
-								my $cmd = 'echo "fine"';
-								system("$cmd");
+								my $encryptedtext = $gpg->encrypt($c->request->parameters->{newpass}, $c->config->{gpgkeyemail});
+								$auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { password => $encryptedtext });
+#Find a way to update with current time
+#$auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { last_server_update => "NOW()" });
+		
                                                         }
 							$c->response->redirect($c->uri_for('/auth' . $auth_id));
 						}
+						else
+						{
+							$c->stash->{usererr} = 'please select a server type';	
+						}
+					}
+					else
+					{
+						$c->stash->{usererr} = 'new password does not match confirmation password';	
 					}
 				}
+				else
+				{
+					$c->stash->{usererr} = 'entered incorrect current password';	
+				}
+			}
+			else
+			{
+				$c->stash->{usererr} = 'please enter current password';	
 			}
 		}
 	}
