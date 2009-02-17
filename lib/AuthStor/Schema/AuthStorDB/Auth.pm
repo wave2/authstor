@@ -4,7 +4,7 @@ use base qw/DBIx::Class/;
 
 __PACKAGE__->load_components(qw/PK::Auto Core/);
 __PACKAGE__->table('auths');
-__PACKAGE__->add_columns(qw/auth_id name username password uri created modified expires group_id description notes status last_server_update updating_server/);
+__PACKAGE__->add_columns(qw/auth_id name username password uri created modified expires group_id description notes status last_server_update updating_server failed_attempt/);
 __PACKAGE__->set_primary_key('auth_id');
 __PACKAGE__->has_many(map_auth_tag => 'AuthStor::Schema::AuthStorDB::AuthTag', 'auth_id');
 __PACKAGE__->has_many(map_auth_attachment => 'AuthStor::Schema::AuthStorDB::AuthAtt', 'auth_id');
