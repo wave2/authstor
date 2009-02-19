@@ -412,6 +412,10 @@ sub updateserver : Regex('^auth(\d+)/updateserver$') {
                                                         }
 							$c->response->redirect($c->uri_for('/auth' . $auth_id));
 						}
+						elsif ($serverType eq "linux")
+						{
+							$c->response->redirect($c->uri_for('/auth' . $auth_id));	
+						}
 						else
 						{
 							$c->stash->{usererr} = 'please select a server type';	
