@@ -1,5 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
+use Net::SSH::Perl;
 package updateServer;
 
 sub linuxUpdate {
@@ -9,8 +10,20 @@ sub linuxUpdate {
         my $newPassword = $data[2];
         my $hostname = $data[3];
         my $auth_id = $data[4];
-	#my $cmd = "ssh $hostname" . '"' . "touch temp.txt; echo -e '$oldPassword
-
+	my $ssh = Net::SSH::Perl->new($hostname);
+	$ssh->login($userName, $oldPassword)||return 1;
+	my $cmd1 = "cd ~;echo $oldPassword>>temp.txt;echo $newPassword>>temp.txt;echo $newPassword>>temp.txt;";
+	my $cmd2 = "passwd <temp.txt;";
+	my $cmd3 = "rm temp.txt";
+	my $cmd = $cmd1.$cmd2.$cmd3;
+    	my($stdout, $stderr, $exit) = $ssh->cmd($cmd);
+	if ( $exit eq "0") {
+		system("touch pass.txt");
+		return 0;
+	} else {
+		system("touch failed.txt");
+		return 1;
+	}
 }
 
 sub mysqlUpdate {

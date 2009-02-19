@@ -414,6 +414,31 @@ sub updateserver : Regex('^auth(\d+)/updateserver$') {
 						}
 						elsif ($serverType eq "linux")
 						{
+							my $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { updating_server => "1" });
+                                                        my $userName = $c->stash->{auth_view}->username;
+                                                        my $oldPassword = $c->request->parameters->{currentpass};
+                                                        my $newPassword = $c->request->parameters->{newpass};
+                                                        my $hostname = $c->stash->{auth_view}->uri;
+							my $returnValue = updateServer::linuxUpdate("$userName", "$oldPassword", "$newPassword", "$hostname", "$auth_id");
+							my $temp=$returnValue;
+							system("echo $temp");
+							if ($returnValue eq "1")
+                                                        {
+                                                        #failed update
+                                                                my $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { updating_server => "0" });
+                                                                $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { failed_attempt  => "1" });
+                                                        }
+                                                        else
+                                                        {
+                                                        #update successfull
+                                                                my $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { updating_server => "0" });
+                                                                $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { failed_attempt  => "0" });
+                                                                my $encryptedtext = $gpg->encrypt($c->request->parameters->{newpass}, $c->config->{gpgkeyemail});
+                                                                $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { password => $encryptedtext });
+#Find a way to update with current time
+#$auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { last_server_update => "NOW()" });
+
+                                                        }
 							$c->response->redirect($c->uri_for('/auth' . $auth_id));	
 						}
 						else
