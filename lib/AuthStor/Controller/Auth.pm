@@ -414,6 +414,7 @@ sub updateserver : Regex('^auth(\d+)/updateserver$') {
 						}
 						elsif ($serverType eq "linux")
 						{
+#							my $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { updating_server => "0" });
 							my $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { updating_server => "1" });
                                                         my $userName = $c->stash->{auth_view}->username;
                                                         my $oldPassword = $c->request->parameters->{currentpass};

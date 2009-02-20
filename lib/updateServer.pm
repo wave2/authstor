@@ -1,6 +1,8 @@
 #!/usr/bin/perl -w
-use strict;
+#use strict;
 use Net::SSH::Perl;
+use Exception::Class::TryCatch;
+use warnings;
 package updateServer;
 
 sub linuxUpdate {
@@ -10,20 +12,18 @@ sub linuxUpdate {
         my $newPassword = $data[2];
         my $hostname = $data[3];
         my $auth_id = $data[4];
-	my $ssh = Net::SSH::Perl->new($hostname);
-	$ssh->login($userName, $oldPassword)||return 1;
-	my $cmd1 = "cd ~;echo $oldPassword>>temp.txt;echo $newPassword>>temp.txt;echo $newPassword>>temp.txt;";
-	my $cmd2 = "passwd <temp.txt;";
-	my $cmd3 = "rm temp.txt";
-	my $cmd = $cmd1.$cmd2.$cmd3;
-    	my($stdout, $stderr, $exit) = $ssh->cmd($cmd);
-	if ( $exit eq "0") {
-		system("touch pass.txt");
-		return 0;
-	} else {
-		system("touch failed.txt");
+	eval
+	{
+		my $ssh = Net::SSH::Perl->new($hostname);
+		$ssh->login($userName, $oldPassword);
+#    		my($stdout, $stderr, $exit) = $ssh->cmd("cd ~;echo $oldPassword >>temp.txt;echo $newPassword >>temp.txt;echo $newPassword >>temp.txt;passwd <temp.txt;rm temp.txt");
+    		my($stdout, $stderr, $exit) = $ssh->cmd("cd ~;echo $oldPassword >>temp.txt;echo $newPassword >>temp.txt;echo $newPassword >>temp.txt;passwd <temp.txt;");
+	};
+	if($@)
+	{
 		return 1;
 	}
+	return 0;
 }
 
 sub mysqlUpdate {
