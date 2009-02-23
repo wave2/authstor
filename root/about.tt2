@@ -10,9 +10,9 @@
 </div>
 <div id='content'>
 <h1>About </h1>
-<p>Revision 210</p>
+<p>Revision 211</p>
 <p>Feturing being devolped and bugs fixed:</p>
-<p>-update linux server basic funtion complete. will need 1 min delay between update</p>
+<p>-Added comments to the modules related to update server function</p>
 
 </div>
 </div>

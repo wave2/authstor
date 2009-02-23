@@ -339,9 +339,16 @@ sub add : Local {
 }
 
 
-###########################################
-################Update Server##############
-###########################################
+#########################################################################################################
+#Function: Update Server										#
+#Purpose: Used as the controller for any webpage auth<number>/updateserver. Uses basic catalyst 	#
+#	conventions.											# 
+#Description:  This function is used to determine how to handle different type of server updates. Inside#
+#	this funtion a different module named updateServer.pm to do the actual execution of updating 	#
+#	the server.											#
+#Last Modification and reason:										#
+#	2/23/09: Began to add comments.									#
+#########################################################################################################
 
 sub updateserver : Regex('^auth(\d+)/updateserver$') {
     my ( $self, $c ) = @_;
@@ -362,8 +369,10 @@ sub updateserver : Regex('^auth(\d+)/updateserver$') {
     my ($plaintext, $signature) = $gpg->verify($c->stash->{auth_view}->get_column('password'));
     $c->stash->{auth_pass} = $plaintext;
 
+#Check for a form submission
 	if ( $c->request->parameters->{form_submit} ) 
 	{
+	#Define which field are required in the submission of the update server form
 		my $dfv_profile =
 		{
 			field_filters => {
@@ -378,6 +387,7 @@ sub updateserver : Regex('^auth(\d+)/updateserver$') {
 		} 
 		else 
 		{
+		#Next 3 if statements check for possible form issues
 			if ($c->request->parameters->{currentpass})
 			{
 				if ($plaintext eq $c->request->parameters->{currentpass} )
@@ -385,13 +395,16 @@ sub updateserver : Regex('^auth(\d+)/updateserver$') {
 					if ($c->request->parameters->{newpass} eq $c->request->parameters->{confirmpass})
 					{
 						my $serverType = $c->request->parameters->{servertype};
+					#Following if statements determine what to do for they type of server the user has decide to update
 						if ($serverType eq "mysql") 
 						{
+						#Setup the initail variable for the server update. Including setting the Auth's status to being updated
 							my $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { updating_server => "1" });
 							my $userName = $c->stash->{auth_view}->username;
 							my $oldPassword = $c->request->parameters->{currentpass};
 							my $newPassword = $c->request->parameters->{newpass};
 							my $hostname = $c->stash->{auth_view}->uri;
+						#Calls the function mysqlUpdate to update the MySQL server if the return value is 1 something went wrong. If 0 the update was successfull.
 							my $returnValue = updateServer::mysqlUpdate("$userName", "$oldPassword", "$newPassword", "$hostname", "$auth_id");
 							if ($returnValue eq "1") 
 							{
@@ -401,7 +414,7 @@ sub updateserver : Regex('^auth(\d+)/updateserver$') {
 							}
 							else
                                                         {
-                                                        #update successfull
+                                                        #update is successfull and set the Auth's status back to non updating
                                                         	my $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { updating_server => "0" });
 								$auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { failed_attempt  => "0" });
 								my $encryptedtext = $gpg->encrypt($c->request->parameters->{newpass}, $c->config->{gpgkeyemail});
@@ -410,19 +423,21 @@ sub updateserver : Regex('^auth(\d+)/updateserver$') {
 #$auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { last_server_update => "NOW()" });
 		
                                                         }
+						#Return to the Auth's view page
 							$c->response->redirect($c->uri_for('/auth' . $auth_id));
 						}
 						elsif ($serverType eq "linux")
 						{
+						#As of right now a minute needs to pass before updating the server again
+						#Setup the initail variable for the server update. Including setting the Auth's status to being updated
 #							my $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { updating_server => "0" });
 							my $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { updating_server => "1" });
                                                         my $userName = $c->stash->{auth_view}->username;
                                                         my $oldPassword = $c->request->parameters->{currentpass};
                                                         my $newPassword = $c->request->parameters->{newpass};
                                                         my $hostname = $c->stash->{auth_view}->uri;
+						#Calls the function linuxUpdate to update the Linux server if the return value is 1 something went wrong. If 0 the update was successfull.
 							my $returnValue = updateServer::linuxUpdate("$userName", "$oldPassword", "$newPassword", "$hostname", "$auth_id");
-							my $temp=$returnValue;
-#							system("echo $temp");
 							if ($returnValue eq "1")
                                                         {
                                                         #failed update
@@ -440,6 +455,7 @@ sub updateserver : Regex('^auth(\d+)/updateserver$') {
 #$auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { last_server_update => "NOW()" });
 
                                                         }
+						#Return to the Auth's view page
 							$c->response->redirect($c->uri_for('/auth' . $auth_id));	
 						}
 						else
