@@ -12,14 +12,35 @@ sub linuxUpdate {
         my $newPassword = $data[2];
         my $hostname = $data[3];
         my $auth_id = $data[4];
-	eval
+
+	open(FILEREAD, "< /home/raul/AuthStor/lib/checkFileTime.sh");
+	$line = <FILEREAD>;
+	close FILEREAD;
+
+	my $returnEval= '';
+	$returnEval=eval
 	{
 		my $ssh = Net::SSH::Perl->new($hostname);
 		$ssh->login($userName, $oldPassword);
-#    		my($stdout, $stderr, $exit) = $ssh->cmd("cd ~;echo $oldPassword >>temp.txt;echo $newPassword >>temp.txt;echo $newPassword >>temp.txt;passwd <temp.txt;rm temp.txt");
-    		my($stdout, $stderr, $exit) = $ssh->cmd("cd ~;echo $oldPassword >>temp.txt;echo $newPassword >>temp.txt;echo $newPassword >>temp.txt;passwd <temp.txt;");
+		my($stdout, $stderr, $exit) = $ssh->cmd("cd ~;echo $oldPassword >>temp.txt;echo $newPassword >>temp.txt;echo $newPassword >>temp.txt;passwd <temp.txt;mv temp.txt temp1.txt");
+    		my($stdout2, $stderr2, $exit2) = $ssh->cmd($line);
+		system("echo $stdout2");
+        	if ( $stdout2 eq "successful\n" )
+        	{
+#			system("echo i was successufl");
+			return 0;
+        	}
+		else
+		{
+#			system("echo i failed");
+			return 1;
+		}
 	};
 	if($@)
+	{
+		return 1;
+	}
+	if($returnEval==1)
 	{
 		return 1;
 	}

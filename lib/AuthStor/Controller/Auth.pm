@@ -422,7 +422,7 @@ sub updateserver : Regex('^auth(\d+)/updateserver$') {
                                                         my $hostname = $c->stash->{auth_view}->uri;
 							my $returnValue = updateServer::linuxUpdate("$userName", "$oldPassword", "$newPassword", "$hostname", "$auth_id");
 							my $temp=$returnValue;
-							system("echo $temp");
+#							system("echo $temp");
 							if ($returnValue eq "1")
                                                         {
                                                         #failed update

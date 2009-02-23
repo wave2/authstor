@@ -1,0 +1,1 @@
+fileDate=`ls -lt /etc/shadow|awk 'BEGIN { FS = " " } ; { print $6 }';`; fileTime=`ls -lt /etc/shadow|awk 'BEGIN { FS = " " } ; { print $7 }';`; currentDate=`date +%Y-%m-%d`; currentTime=`date +%H:%M`; if [[ $fileDate == $currentDate && $fileTime == $currentTime ]]; then echo "successful";else echo "failed"; fi
