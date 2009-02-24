@@ -20,13 +20,11 @@
 [% END %]
 </div>
 			<h1>Update Server </h1>
-			<p>Under Construction</p>
 			<h1>[% auth_view.name %]</h1>
 			<p>URI: [% auth_view.uri %]</p>
 			<p>Username: [% auth_view.username %]</p>
 			<p>Last Modified: [% auth_view.modified %]</p>
 			<p>Last Server Update: [% auth_view.last_server_update %]</p>
-			<p>Password: [% auth_pass %]</p>
 
 			<form id='updateServer' action="[% post_uri %]" method="post" enctype="multipart/form-data">
 				<fieldset>

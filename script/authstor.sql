@@ -198,6 +198,50 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
+--
+-- Table structure for table `notify _groups`
+--
+
+DROP TABLE IF EXISTS `notify_groups`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `notify_groups` (
+  `Group_ID` int(11) NOT NULL auto_increment,
+  `Group_Name` char(50) default NULL,
+  PRIMARY KEY  (`Group_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `notify _users`
+--
+DROP TABLE IF EXISTS `notify _users`;
+CREATE TABLE `notify _users` (
+  `User_ID` int(11) unsigned NOT NULL auto_increment,
+  `Last_Name` char(50) default NULL,
+  `First_Name` char(50) default NULL,
+  `Email` char(50) default NULL,
+  `Phone#` char(15) default NULL,
+  PRIMARY KEY  (`User_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `notify _users_groups`
+--
+DROP TABLE IF EXISTS `notify _users_groups`;
+CREATE TABLE `notify _users_groups` (
+  `Entry` int(11) NOT NULL auto_increment,
+  `User_ID` int(11) unsigned NOT NULL,
+  `Group_ID` int(11) unsigned NOT NULL,
+  PRIMARY KEY  (`Entry`),
+  KEY `User_ID` (`User_ID`),
+  KEY `Group_ID` (`Group_ID`),
+  CONSTRAINT `user_group_noti_ibfk_1` FOREIGN KEY (`User_ID`) REFERENCES `notify _users` (`User_ID`),
+  CONSTRAINT `user_group_noti_ibfk_2` FOREIGN KEY (`Group_ID`) REFERENCES `notify _groups` (`Group_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
 INSERT INTO users (user_id,username,password,first_name, last_name) VALUES (0,'admin','{SSHA512}zgBFr+94mwysN+IfFQYGmuxKAuoo/iDcdwe7nnMARYb2hkguNA2WqUWEmqwOBzEHVpsA6hoAOgH7Xq2ysSEUYqNNAVw=','AuthStor','Admin');
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
