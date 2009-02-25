@@ -18,14 +18,15 @@ AuthStor::Controller::notify - Catalyst Controller
 
 =head1 DESCRIPTION
 
-Catalyst Controller.
-
-=head1 METHODS
+Catalyst Controller. This controller is use to handle all the email notification functionality for AuthStor. 
+List of functions:
+-addition of user to an email group is done
+-send emails
+-send email notification after an auth has been updated.
 
 =cut
 
-
-=head2 index
+=head1 FUNCTION BREAKDOWN
 
 =cut
 

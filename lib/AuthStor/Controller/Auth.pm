@@ -20,14 +20,48 @@ AuthStor::Controller::Auth - Catalyst Controller
 
 Catalyst Controller.
 
-=head1 METHODS
+=head1 FUNCTION BREAKDOWN
 
+ Function: Update Server                                                                                
+ Last Modification and reason: 2/23/09: Began to add comments.
+ Purpose: Used as the controller for any webpage auth<number>/updateserver. Uses basic catalyst conventions.
+ Description:  This function is used to determine how to handle different type of server updates. Inside this funtion a different module named updateServer.pm to do the actual execution of updating the server.
+
+ Function: getParents
+ Last Modification and reason:
+ Purpose:
+ Description: 
+
+ Function: auth
+ Last Modification and reason:
+ Purpose:
+ Description:
+
+ Function: delete 
+ Last Modification and reason:
+ Purpose:
+ Description:
+
+ Function: att
+ Last Modification and reason:
+ Purpose:
+ Description:
+
+ Function: edit 
+ Last Modification and reason:
+ Purpose:
+ Description:
+
+ Function: add
+ Last Modification and reason:
+ Purpose:
+ Description:
+
+
+ 
 =cut
 
 
-=head2 index 
-
-=cut
 
 sub getParents($$) {
   my ($c,$currentParent) = @_;
@@ -339,16 +373,6 @@ sub add : Local {
 }
 
 
-#########################################################################################################
-#Function: Update Server										#
-#Purpose: Used as the controller for any webpage auth<number>/updateserver. Uses basic catalyst 	#
-#	conventions.											# 
-#Description:  This function is used to determine how to handle different type of server updates. Inside#
-#	this funtion a different module named updateServer.pm to do the actual execution of updating 	#
-#	the server.											#
-#Last Modification and reason:										#
-#	2/23/09: Began to add comments.									#
-#########################################################################################################
 
 sub updateserver : Regex('^auth(\d+)/updateserver$') {
     my ( $self, $c ) = @_;
