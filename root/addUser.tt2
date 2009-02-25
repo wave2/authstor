@@ -24,6 +24,7 @@
 <tr><td><p>Last Name:</p></td><td><input type="text" name='lastname' id='lastname' size='22' maxlength='100' /></td></tr>
 <tr><td><p>E-Mail:</p></td><td><input type="text" name='email' id='email' size='22' maxlength='100' /></td></tr>
 <tr><td><p>Mobile:</p></td><td><input type="text" name='mobile' id='mobile' size='22' maxlength='100' /></td></tr>
+<tr><td><p>Active User:</p></td><td><INPUT TYPE=CHECKBOX NAME="active">Yes!</td></tr>
 </table>
 <h2>Description</h2>
 <textarea id='description' name="description" rows='5' cols='50'></textarea>

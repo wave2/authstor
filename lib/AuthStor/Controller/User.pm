@@ -42,7 +42,14 @@ sub add : Local {
     my $active = $c->request->param('active');
     my $mobile = $c->request->param('mobile');
     my $description = $c->request->param('description');
-
+	if($active eq "on")
+        {
+                $active=0;
+        }
+        else
+        {
+                $active=1;
+        }
     #Form submission?
     if ( $c->request->parameters->{form_submit} eq 'yes' ) {
       my $dfv_profile =
