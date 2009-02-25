@@ -213,20 +213,6 @@ CREATE TABLE `notify_groups` (
 SET character_set_client = @saved_cs_client;
 
 --
--- Table structure for table `notify _users`
---
-DROP TABLE IF EXISTS `notify _users`;
-CREATE TABLE `notify _users` (
-  `User_ID` int(11) unsigned NOT NULL auto_increment,
-  `Last_Name` char(50) default NULL,
-  `First_Name` char(50) default NULL,
-  `Email` char(50) default NULL,
-  `Phone#` char(15) default NULL,
-  PRIMARY KEY  (`User_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
-
---
 -- Table structure for table `notify _users_groups`
 --
 DROP TABLE IF EXISTS `notify _users_groups`;
@@ -237,7 +223,7 @@ CREATE TABLE `notify _users_groups` (
   PRIMARY KEY  (`Entry`),
   KEY `User_ID` (`User_ID`),
   KEY `Group_ID` (`Group_ID`),
-  CONSTRAINT `user_group_noti_ibfk_1` FOREIGN KEY (`User_ID`) REFERENCES `notify _users` (`User_ID`),
+  CONSTRAINT `user_group_noti_ibfk_1` FOREIGN KEY (`User_ID`) REFERENCES `users` (`user_id`),
   CONSTRAINT `user_group_noti_ibfk_2` FOREIGN KEY (`Group_ID`) REFERENCES `notify _groups` (`Group_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
