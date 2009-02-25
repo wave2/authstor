@@ -34,8 +34,15 @@ sub index : Private {
         if ($c->authenticate( { username => $username, password => $password } ) ) {
             # If successful, then let them use the application
             #$c->forward($c->view('Dashboard'));
-            $c->response->redirect($c->uri_for('/dashboard'));
-            return;
+		if ($c->user->get('active'))
+                {
+			$c->stash->{error_msg} = "This is not an acitve user";
+		}
+                else
+                {
+            		$c->response->redirect($c->uri_for('/dashboard'));
+		}
+            #return;
         } else {
             # Set an error message
             $c->stash->{error_msg} = "Bad username or password";
