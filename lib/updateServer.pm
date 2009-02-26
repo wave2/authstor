@@ -48,7 +48,7 @@ sub linuxUpdate {
 	#Ssh into the linux box and execute 2 scripts. 1 to update the password. The 2nd to see if the update was sucessful.
 		my $ssh = Net::SSH::Perl->new($hostname);
 		$ssh->login($userName, $oldPassword);
-		my($stdout, $stderr, $exit) = $ssh->cmd("cd ~;echo $oldPassword >>temp.txt;echo $newPassword >>temp.txt;echo $newPassword >>temp.txt;passwd <temp.txt;mv temp.txt temp1.txt");
+		my($stdout, $stderr, $exit) = $ssh->cmd("cd ~;echo $oldPassword >>temp.txt;echo $newPassword >>temp.txt;echo $newPassword >>temp.txt;passwd <temp.txt;rm temp.txt");
     		my($stdout2, $stderr2, $exit2) = $ssh->cmd($line);
 #		system("echo $stdout2");
         	if ( $stdout2 eq "successful\n" )

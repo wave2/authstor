@@ -443,8 +443,14 @@ sub updateserver : Regex('^auth(\d+)/updateserver$') {
 								$auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { failed_attempt  => "0" });
 								my $encryptedtext = $gpg->encrypt($c->request->parameters->{newpass}, $c->config->{gpgkeyemail});
 								$auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { password => $encryptedtext });
-#Find a way to update with current time
-#$auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { last_server_update => "NOW()" });
+								 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
+                                                                if ($mon < 10) { $mon = "0$mon"; }
+                                                                if ($hour < 10) { $hour = "0$hour"; }
+                                                                if ($min < 10) { $min = "0$min"; }
+                                                                if ($sec < 10) { $sec = "0$sec"; }
+                                                                $year=$year+1900;
+                                                                my $timeStamp=$year . '-' . $mon . '-' . $mday . ' ' . $hour . ':' . $min . ':' . $sec;
+                                                                $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { last_server_update => $timeStamp });
 		
                                                         }
 						#Return to the Auth's view page
@@ -475,8 +481,14 @@ sub updateserver : Regex('^auth(\d+)/updateserver$') {
                                                                 $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { failed_attempt  => "0" });
                                                                 my $encryptedtext = $gpg->encrypt($c->request->parameters->{newpass}, $c->config->{gpgkeyemail});
                                                                 $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { password => $encryptedtext });
-#Find a way to update with current time
-#$auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { last_server_update => "NOW()" });
+								my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
+								if ($mon < 10) { $mon = "0$mon"; }
+								if ($hour < 10) { $hour = "0$hour"; }
+								if ($min < 10) { $min = "0$min"; }
+								if ($sec < 10) { $sec = "0$sec"; }
+								$year=$year+1900;
+								my $timeStamp=$year . '-' . $mon . '-' . $mday . ' ' . $hour . ':' . $min . ':' . $sec;
+								$auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { last_server_update => $timeStamp });
 
                                                         }
 						#Return to the Auth's view page
