@@ -349,7 +349,15 @@ sub add : Local {
        my $encryptedtext = $gpg->encrypt($c->request->parameters->{password}, $c->config->{gpgkeyemail});
 
        #Add the Auth
-       my $auth = $c->model('AuthStorDB::Auth')->create( { name => $c->request->parameters->{name}, uri => $c->request->parameters->{uri}, username => $c->request->parameters->{username}, password => $encryptedtext, group_id => $c->request->parameters->{group_id}, notes => $c->request->parameters->{notes} });
+       my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
+       if ($mon < 10) { $mon = "0$mon"; }
+       if ($hour < 10) { $hour = "0$hour"; }
+       if ($min < 10) { $min = "0$min"; }
+       if ($sec < 10) { $sec = "0$sec"; }
+       $year=$year+1900;
+       my $timeStamp=$year . '-' . $mon . '-' . $mday . ' ' . $hour . ':' . $min . ':' . $sec;
+
+       my $auth = $c->model('AuthStorDB::Auth')->create( { name => $c->request->parameters->{name}, uri => $c->request->parameters->{uri}, username => $c->request->parameters->{username}, password => $encryptedtext, group_id => $c->request->parameters->{group_id}, notes => $c->request->parameters->{notes}, created => $timeStamp });
 
        #Add new tags
        foreach my $formtag (split('\s+',$results->valid('tags'))){
