@@ -21,7 +21,7 @@ my $port              = $ENV{AUTHSTOR_PORT} || $ENV{CATALYST_PORT} || 3000;
 my $keepalive         = 0;
 my $restart           = $ENV{AUTHSTOR_RELOAD} || $ENV{CATALYST_RELOAD} || 0;
 my $restart_delay     = 1;
-my $restart_regex     = '(?:/|^)(?!\.#).+(?:\.yml$|\.yaml$|\.pm)$';
+my $restart_regex     = '(?:/|^)(?!\.#).+(?:\.yml$|\.yaml$|\.conf|\.pm)$';
 my $restart_directory = undef;
 my $follow_symlinks   = 0;
 
@@ -88,7 +88,7 @@ authstor_server.pl [options]
    -rd -restartdelay  delay between file checks
    -rr -restartregex  regex match files that trigger
                       a restart when modified
-                      (defaults to '\.yml$|\.yaml$|\.pm$')
+                      (defaults to '\.yml$|\.yaml$|\.conf|\.pm$')
    -restartdirectory  the directory to search for
                       modified files, can be set mulitple times
                       (defaults to '[SCRIPT_DIR]/..')
@@ -102,10 +102,9 @@ authstor_server.pl [options]
 
 Run a Catalyst Testserver for this application.
 
-=head1 AUTHOR
+=head1 AUTHORS
 
-Sebastian Riedel, C<sri@oook.de>
-Maintained by the Catalyst Core Team.
+Catalyst Contributors, see Catalyst.pm
 
 =head1 COPYRIGHT
 

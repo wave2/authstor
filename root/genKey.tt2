@@ -1,0 +1,32 @@
+[% PROCESS head.tt2 -%]
+<body class='yui-skin-sam'>
+[% PROCESS yuiCommon.tt2 -%]
+[% PROCESS yuiButton.tt2 -%]
+[% PROCESS header.tt2 -%]
+<div id='container'>
+<div>
+<form action="[% post_uri %]" method="post" enctype="multipart/form-data">
+<h1>Generate Key</h1>
+[% IF error_msg %]
+<div id="login_error">
+  <strong>ERROR</strong>: [% error_msg %].<br />
+</div>
+[% END %]
+<table>
+<tr><td><p>Name:</p></td><td><input type="text" name="keyName" id="keyName" size='22' maxlength='100' /></td></tr>
+<tr><td><p>E-Mail:</p></td><td><input type="text" name="keyEmail" id="keyEmail" size='22' maxlength='100' /
+></td></tr>
+<tr><td><p>Password:</p></td><td><input type="text" name="keyPassword" id="keyPassword" size='22' maxlength='100' /
+></td></tr>
+</table>
+<input id="submitButton" type="submit" name="submitButton" value="Generate Key">
+<script type='text/javascript'>
+  var oPushButton1 = new YAHOO.widget.Button("submitButton")
+</script>
+<input type="hidden" name="form_submit" value="yes">
+</form>
+</div>
+</div>
+<div id='footer'></div>
+</body>
+[% PROCESS footer.tt2 -%]

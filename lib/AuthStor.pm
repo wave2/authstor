@@ -12,7 +12,6 @@ use Catalyst qw/
     -Debug
     ConfigLoader
     Static::Simple
-    StackTrace
     
     Authentication
     Authorization::Roles
@@ -22,7 +21,7 @@ use Catalyst qw/
     Session::State::Cookie
     /;
 
-our $VERSION = '0.01';
+our $VERSION = '1.0';
 
 # Configure the application. 
 #

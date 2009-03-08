@@ -5,10 +5,6 @@ use warnings;
 use base 'Catalyst::Controller';
 use HTML::TagCloud;
 
-#
-# Sets the actions in this controller to be registered with no prefix
-# so they function identically to actions created in MyApp.pm
-#
 __PACKAGE__->config->{namespace} = '';
 
 =head1 NAME
@@ -113,12 +109,11 @@ sub end : ActionClass('RenderView') {}
 
 =head1 AUTHOR
 
-Charlie &
+Alan Snelson
 
 =head1 LICENSE
 
-This library is free software, you can redistribute it and/or modify
-it under the same terms as Perl itself.
+See the file LICENSE for details.
 
 =cut
 
