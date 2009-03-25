@@ -1,14 +1,11 @@
 [% PROCESS head.tt2 -%]
 <body class="login">
-<!--[if IE]><style type="text/css">#login h1 a { margin-top: 35px; } #login #login_error { margin-bottom: 10px; }</
-style><![endif]--><!-- Curse you, IE! -->
 <script type="text/javascript">
     function focusit() {
         document.getElementById('user_login').focus();
     }
     window.onload = focusit;
 </script>
-
 <div id="login">
 <h1><a href='[% base %]'>AuthStor</a></h1>
 [% IF error_msg %]
@@ -16,8 +13,7 @@ style><![endif]--><!-- Curse you, IE! -->
 	<strong>ERROR</strong>: [% error_msg %].<br />
 </div>
 [% END %]
-
-<form id="loginform" method="post" action=" [% Catalyst.uri_for('/login') %] ">
+<form id="loginform" method="post" action="/login">
 <fieldset>
 <div class='required'>
 <label for='user_login'>Username:</label>
@@ -38,5 +34,4 @@ style><![endif]--><!-- Curse you, IE! -->
 </fieldset>
 </form>
 </div>
-
 [% PROCESS footer.tt2 -%]
