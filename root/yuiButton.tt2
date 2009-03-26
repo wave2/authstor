@@ -1,4 +1,4 @@
 <!-- Button -->
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.6.0/build/button/assets/skins/sam/button.css">
+<link rel="stylesheet" type="text/css" href="[% base %]static/yui/2.7.0/build/button/assets/skins/sam/button.css">
 <!-- Source file -->
-<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/button/button-min.js"></script>
+<script type="text/javascript" src="[% base %]static/yui/2.7.0/build/button/button-min.js"></script>

@@ -1,9 +1,9 @@
 <!-- TreeView -->
-<link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/2.6.0/build/treeview/assets/skins/sam/treeview.css">
+<link type="text/css" rel="stylesheet" href="[% base %]static/yui/2.7.0/build/treeview/assets/skins/sam/treeview.css">
 <link rel="stylesheet" href="/tree.css" type="text/css" />
 
 <!-- Source File -->
-<script src = "http://yui.yahooapis.com/2.6.0/build/treeview/treeview-min.js" ></script>
+<script src = "[% base %]static/yui/2.7.0/build/treeview/treeview-min.js" ></script>
 
 <script type="text/javascript">
 YAHOO.util.Event.onDOMReady(function () {
