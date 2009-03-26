@@ -233,7 +233,7 @@ function loadNodeData(node, fnLoadComplete)  {
         //and then return fnLoadComplete back to the tree.
 
         //prepare URL for XHR request:
-        var sUrl = "[% base %]children" + node.data.id;
+        var sUrl = "[% base %]group" + node.data.id + "/children";
 
         //prepare our callback object
         var callback = {

@@ -11,7 +11,7 @@ AuthStor::Controller::Group - Catalyst Controller
 
 =head1 DESCRIPTION
 
-Catalyst Controller.
+Catalyst Controller - Group functions.
 
 =head1 METHODS
 
@@ -163,7 +163,7 @@ sub edit : Regex('^group(\d+)/edit$') {
     $c->forward('AuthStor::View::TT');
 }
 
-sub children : Regex('^children(\d+)$') {
+sub children : Regex('^group(\d+)/children$') {
     my ( $self, $c ) = @_;
     my $group_id  = $c->request->snippets->[0];
     #$c->stash->{message} = $c->model('AuthStorDB::AuthGroup')->search({parent_id => $group_id})->next->name;
@@ -185,12 +185,11 @@ sub children : Regex('^children(\d+)$') {
 
 =head1 AUTHOR
 
-Charlie &
+Alan Snelson
 
 =head1 LICENSE
 
-This library is free software, you can redistribute it and/or modify
-it under the same terms as Perl itself.
+See the file LICENSE for details.
 
 =cut
 
