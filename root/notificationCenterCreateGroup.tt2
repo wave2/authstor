@@ -9,5 +9,27 @@
 		<div id='treeDiv'></div> 
 	</div>
 </div>
+<div id='content'>
+	<form id='createNotificationGroupForm' action="[% post_uri %]" method="post" enctype="multipart/form-data">
+		<fieldset>
+			<h1>Create Notification Group</h1>
+			<div class='errormsg'>
+				[% IF errormsg %]
+					<center><b><font size="5" color="red"> Please enter a group name.</font></b></center>
+				[% END %]
+			</div>
+			<div class="required">
+				<label for="groupName" style='width:200px;'>Notification Group Name:</label> 
+				<input type="text" name="groupName" id="groupName" size='22' maxlength='100' />
+			</div>
+			<input id="submitButton" type="submit" name="submitButton" value="Add Notification Group">
+			<script type='text/javascript'>
+				var oPushButton1 = new YAHOO.widget.Button("submitButton");
+			</script>
+			<input type="hidden" name="form_submit" value="yes">
+		</fieldset>
+	</form>
+</div>
+
 
 [% PROCESS footer.tt2 -%]

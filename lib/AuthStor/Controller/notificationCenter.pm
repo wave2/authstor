@@ -15,9 +15,9 @@ Catalyst Controller.
 =head1 FUNCTION BREAKDOWN
 
  Function: creategroup
- Last Modification and reason: 2/23/09: Began to add comments.
- Purpose: Used as the controller for any webpage auth<number>/updateserver. Uses basic catalyst conventions.
- Description:  This function is used to 
+ Last Modification and reason: 4/5/09: 
+ Purpose: Used as the controller for notificationCenter/creategroup. Uses basic catalyst conventions.
+ Description:  This function is used to create notification groups.
 
 
 =cut
@@ -32,13 +32,28 @@ sub index : Private {
 }
 
 sub creategroup :  Regex('^notificationcenter/creategroup$') {
-        my ( $self, $c ) = @_;
-	my $someText="hello";
-	my $auth = $c->model('AuthStorDB::NotifyGroups')->create( { group_name => "test" } );
-        $c->stash->{title} = 'Notification Center';
-        $c->stash->{template} = 'notificationCenterCreateGroup.tt2';
-        $c->forward('AuthStor::View::TT');
-
+	my ( $self, $c ) = @_;
+	if ( $c->request->parameters->{form_submit} ) { 
+		my $dfv_profile =
+		{   
+		field_filters => { 
+		tags => [qw/trim strip/],
+		},
+		required => [ qw( groupName ) ],
+		};  
+		my $results = Data::FormValidator->check($c->req->parameters, $dfv_profile);
+		if ($results->has_invalid or $results->has_missing) {
+		# do something with $results->invalid, $results->missing
+			$c->stash->{errormsg} = "Enter a group name";
+		}   
+		else 
+		{
+			my $auth = $c->model('AuthStorDB::NotifyGroups')->create( { group_name => $c->request->parameters->{groupName} } );
+		}
+	}
+	$c->stash->{title} = 'Notification Center';
+	$c->stash->{template} = 'notificationCenterCreateGroup.tt2';
+	$c->forward('AuthStor::View::TT');
 }
 
 
@@ -47,7 +62,6 @@ sub editgroupproperties :  Regex('^notificationcenter/editgroupproperties$') {
         $c->stash->{title} = 'Notification Center';
         $c->stash->{template} = 'notificationCenter.tt2';
         $c->forward('AuthStor::View::TT');
-
 }
 
 
@@ -88,7 +102,6 @@ sub sendemail : Regex('^notificationcenter/sendemail$') {
         $c->stash->{title} = 'Notification Center';
         $c->stash->{template} = 'notificationCenterSendEmail.tt2';
         $c->forward('AuthStor::View::TT');
-
 }
 
 
