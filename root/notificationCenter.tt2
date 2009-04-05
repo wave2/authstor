@@ -10,27 +10,9 @@
 	</div>
 	<div id='content'>
 	<h1>Notification Center </h1>
-		<form id='updateServer' action="[% post_uri %]" method="post" enctype="multipart/form-data">
-                	<fieldset>
-                                <div class='required'>
-                                        <label for='touser' style='width:65px;'>To:</label>
-                                        <input type="text" name="touser" id="touser" size='113' maxlength='100' value='' /> 
-                                </div>
-				<div class='required'>
-					<label for='subject' style='width:65px;'>Subject:</label>
-					<input type="text" name="subject" id="subject" size='113' maxlength='100' value='' /> 
-				</div>
-				<br>
-				<textarea NAME="bodyofemail" cols="120" rows="10" wrap="hard">
-				</textarea>
-                                        <input id="submitButton" type="submit" name="submitButton" value="Send">
-                                        <script type='text/javascript'>
-                                                var oPushButton1 = new YAHOO.widget.Button("submitButton");
-                                        </script>
-                                        <input type="hidden" name="form_submit" value="yes">
-
-			</fieldset>
-		</form>
+		<li><a href="[% base %]/notificationcenter/creategroup" title="Create Group">Create Group</a></li>
+		<li><a href="[% base %]/notificationcenter/editgroupproperties" title="Edit Group Properties">Edit Group Properties</a></li>
+		<li><a href="[% base %]/notificationcenter/sendemail" title="Send Email">Send Email</a></li>
 	</div>
 </div>
 [% PROCESS footer.tt2 -%]
