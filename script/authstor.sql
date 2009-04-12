@@ -105,6 +105,28 @@ CREATE TABLE `auths` (
 SET character_set_client = @saved_cs_client;
 
 --
+-- Table structure for table `keys`
+--
+
+DROP TABLE IF EXISTS `keys`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `keys` (
+  `key_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `key_type` enum('DSA') NOT NULL,
+  `key_length` int(10) UNSIGNED NOT NULL,
+  `subkey_type` enum('ELG-E') NOT NULL,
+  `subkey_length` int(10) NOT NULL,
+  `name_real` varchar(100) NOT NULL,
+  `name_comment` varchar(255) NOT NULL,
+  `name_email` varchar(100) NOT NULL,
+  `active` boolean NOT NULL,
+  `description` text,
+  PRIMARY KEY (`key_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
 -- Table structure for table `events`
 --
 
@@ -199,32 +221,34 @@ CREATE TABLE `users` (
 SET character_set_client = @saved_cs_client;
 
 --
--- Table structure for table `notify _groups`
+-- Table structure for table `notify_groups`
 --
 
 DROP TABLE IF EXISTS `notify_groups`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `notify_groups` (
-  `Group_ID` int(11) unsigned NOT NULL auto_increment,
-  `Group_Name` char(50) default NULL,
-  PRIMARY KEY  (`Group_ID`)
+  `group_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `group_name` char(50) DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY  (`group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
--- Table structure for table `notify _users_groups`
+-- Table structure for table `notify_users_groups`
 --
+
 DROP TABLE IF EXISTS `notify_users_groups`;
 CREATE TABLE `notify_users_groups` (
-  `Entry` int(11) NOT NULL auto_increment,
-  `User_ID` int(11) unsigned NOT NULL,
-  `Group_ID` int(11) unsigned NOT NULL,
-  PRIMARY KEY  (`Entry`),
-  KEY `User_ID` (`User_ID`),
-  KEY `Group_ID` (`Group_ID`),
-  CONSTRAINT `user_group_noti_ibfk_1` FOREIGN KEY (`User_ID`) REFERENCES `users` (`user_id`),
-  CONSTRAINT `user_group_noti_ibfk_2` FOREIGN KEY (`Group_ID`) REFERENCES `notify_groups` (`Group_ID`)
+  `entry` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) UNSIGNED NOT NULL,
+  `group_id` int(11) UNSIGNED NOT NULL,
+  PRIMARY KEY  (`entry`),
+  KEY `user_id` (`user_id`),
+  KEY `group_id` (`group_id`),
+  CONSTRAINT `user_group_noti_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  CONSTRAINT `user_group_noti_ibfk_2` FOREIGN KEY (`group_id`) REFERENCES `notify_groups` (`group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 INSERT INTO users (user_id,username,password,first_name, last_name) VALUES (0,'admin','{SSHA512}zgBFr+94mwysN+IfFQYGmuxKAuoo/iDcdwe7nnMARYb2hkguNA2WqUWEmqwOBzEHVpsA6hoAOgH7Xq2ysSEUYqNNAVw=','AuthStor','Admin');
