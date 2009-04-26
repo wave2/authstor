@@ -1,0 +1,234 @@
+<script src="http://yui.yahooapis.com/2.6.0/build/yuiloader/yuiloader-min.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+(function () {
+	var loader = new YAHOO.util.YUILoader();
+	loader.loadOptional = true;
+	loader.filter = "raw";
+	loader.require("reset-fonts-grids","base","datatable","dragdrop","selector");
+	loader.insert({ 
+		onSuccess: function() {
+			//shortcuts
+			var Event = YAHOO.util.Event,
+				Dom = YAHOO.util.Dom,
+				Lang = YAHOO.lang,
+				$ = Dom.get,
+				DT = YAHOO.widget.DataTable;
+
+
+			DT.prototype.refreshRow = function(row) {
+				var self = this;
+				Dom.getElementsByClassName(DT.CLASS_LINER,'div',this.getTrEl(row),function(el) {
+					self.formatCell.call(self,el);
+				});
+			};		
+
+			//create the table which will hold all the users not currently in the notifcationgroup
+			var dtSource = new DT(
+				'sourceContainer',
+				[
+					{key:'userID',label:'User ID', className:'number', sortable:true},
+					{key:'fname',label:'First Name', sortable:true},
+					{key:'lname',label:'Last Name', sortable:true}
+				],
+				new YAHOO.util.DataSource(
+					[
+						{userID:'1',fname:'item 1',lname:10},
+						{userID:'2',fname:'item 3',lname:8},
+						{userID:'3',fname:'item 9',lname:13},
+						{userID:'4',fname:'item 11',lname:3}
+					],
+					{
+						responseType:YAHOO.util.DataSource.TYPE_JSARRAY,
+						responseSchema: {fields:['userID','fname','lname']}
+					}
+				),
+				{
+					MSG_EMPTY: "No more users to select."
+				},
+
+				{rowSingleSelect: true}
+			);
+
+			
+			dtSource.subscribe('headerCellClickEvent' ,function(ev) {
+				var target = YAHOO.util.Event.getTarget(ev);
+				var column = this.getColumn(target);
+				var cells = YAHOO.util.Selector.query('.yui-dt-col-' + column.key,this.getTableEl());
+				YAHOO.util.Dom.addClass(cells,'hide');
+			});
+			
+			// Create the table with all the users currently in the Notification group.
+			var dtDest = new DT(
+				'destContainer',
+				[
+					{key:'userID',label:'User ID', className:'number', sortable:true},
+					{key:'fname',label:'First Name', sortable:true},
+					{key:'lname',label:'Last Name', sortable:true}
+				],
+				new YAHOO.util.DataSource(
+					[],
+					{
+						responseType:YAHOO.util.DataSource.TYPE_JSARRAY,
+						responseSchema: {fields:['userID','fname','lname']}
+					}
+				),
+				{
+					// The invoice will be empty the first time around
+					// so I change the message to prompt the user
+					MSG_EMPTY: "Drag and drop users here."
+				},
+				{rowSingleSelect: true}
+
+			);
+		
+			dtDest.subscribe('headerCellClickEvent' ,function(ev) {
+				var target = YAHOO.util.Event.getTarget(ev);
+				var column = this.getColumn(target);
+				var cells = YAHOO.util.Selector.query('.yui-dt-col-' + column.key,this.getTableEl());
+				YAHOO.util.Dom.addClass(cells,'hide');
+			});
+
+
+			(function () {
+				// This is what does the dragging and dropping
+				// I put it into an anonymous function to encapsulate its variables and mark its span.
+				var selectedRecord;
+				var selectedRecord2;
+				var srcRow;
+				var srcRow2;
+				var destId = null;
+				var destId2 = null;
+				var ddProxyEl = document.body.appendChild(document.createElement('div'));
+				var tr = dtSource.getTrEl(0);
+				var tr2 = dtDest.getTrEl(0);
+				ddProxyEl.style.width = tr.offsetWidth + 'px';
+				ddProxyEl.style.height = tr.offsetHeight + 'px';
+
+				var dd = new YAHOO.util.DDProxy(
+					dtSource.getTbodyEl(),
+					'default',
+					{
+						dragElId: ddProxyEl,
+						resizeFrame: false
+					}
+				);
+				
+				var dd2 = new YAHOO.util.DDProxy(
+					dtDest.getTbodyEl(),
+					'default',
+					{
+						dragElId: ddProxyEl,
+						resizeFrame: false
+					}
+				);				
+				
+				dd.onMouseDown = function(ev) {
+					var target = Event.getTarget(ev);
+					selectedRecord = dtSource.getRecord(target);
+					srcRow = dtSource.getTrEl(target);
+					dtSource.highlightRow(srcRow);
+				};
+				
+				dd2.onMouseDown = function(ev) {
+					var target = Event.getTarget(ev);
+					selectedRecord2 = dtDest.getRecord(target);
+					srcRow2 = dtDest.getTrEl(target);
+					dtDest.highlightRow(srcRow2);
+				};				
+				
+				dd.onMouseUp = function(ev) {
+					dtSource.unhighlightRow(srcRow);
+				};
+
+				dd2.onMouseUp = function(ev) {
+					dtDest.unhighlightRow(srcRow2);
+				};
+
+				dd.b4Drag = function(e) {
+			        this.setDragElPos(YAHOO.util.Event.getPageX(e),  YAHOO.util.Event.getPageY(e) + Dom.getXY(srcRow)[1] - Dom.getXY(dtSource.getTbodyEl())[1]);
+				};
+
+				dd2.b4Drag = function(e) {
+			        this.setDragElPos(YAHOO.util.Event.getPageX(e),  YAHOO.util.Event.getPageY(e) + Dom.getXY(srcRow2)[1] - Dom.getXY(dtDest.getTbodyEl())[1]);
+				};
+
+				dd.startDrag = function (x,y) {
+					var s = ddProxyEl.style;
+					s.cursor = 'move';
+					s.border = '2px solid #aaa';
+				};
+
+				dd2.startDrag = function (x,y) {
+					var s = ddProxyEl.style;
+					s.cursor = 'move';
+					s.border = '2px solid #aaa';
+				};
+
+				dd.onDragOver = function(ev,id) {
+					YAHOO.util.Dom.addClass(id, 'over');
+					if (destId && (destId != id)) {
+						YAHOO.util.Dom.removeClass(destId, 'over');
+					}
+					destId = id;
+				};
+
+				dd2.onDragOver = function(ev,id) {
+					YAHOO.util.Dom.addClass(id, 'over');
+					if (destId2 && (destId2 != id)) {
+						YAHOO.util.Dom.removeClass(destId2, 'over');
+					}
+					destId = id;
+				};
+
+				dd.onDragOut = function() {
+					YAHOO.util.Dom.removeClass(destId, 'over');
+				};
+
+				dd2.onDragOut = function() {
+					YAHOO.util.Dom.removeClass(destId2, 'over');
+				};
+
+				dd.onDragDrop = function(ev) {
+					var rec = selectedRecord.getData();
+					var rowIndex = dtDest.getRecordIndex(destId) || 0;
+					dtDest.addRow(rec,rowIndex);
+					dtSource.deleteRow(srcRow);
+					Dom.removeClass(destId, 'over');
+					// The following is to restore the static positioning of the source element since it is left with position:relative
+					// since that setting is done after returning from this function, I do it after a brief delay.
+					// The borders of the cells in the source table flash for a little while
+					window.setTimeout(
+						function() {
+							Dom.setStyle(dtSource.getTbodyEl(),'position','static');
+						},
+						50
+					);
+				};
+				
+				dd2.onDragDrop = function(ev) {
+					var rec = selectedRecord2.getData();
+					var rowIndex = dtSource.getRecordIndex(destId2) || 0;
+					dtSource.addRow(rec,rowIndex);
+					dtDest.deleteRow(srcRow2);
+					Dom.removeClass(destId2, 'over');
+					// The following is to restore the static positioning of the source element since it is left with position:relative
+					// since that setting is done after returning from this function, I do it after a brief delay.
+					// The borders of the cells in the source table flash for a little while
+					window.setTimeout(
+						function() {
+							Dom.setStyle(dtDest.getTbodyEl(),'position','static');
+						},
+						50
+					);
+				};
+				
+			    // The first drag and drop destination is where the messages are shown
+			    (new YAHOO.util.DDTarget(dtDest.getMsgTbodyEl()));
+			})();
+		}
+	});
+})();
+
+/* Original idea from http://www.satyam.com.ar/yui/*/
+</script>
