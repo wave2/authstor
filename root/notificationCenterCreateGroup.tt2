@@ -30,15 +30,15 @@
 			<input type="hidden" name="form_submit" value="yes">
 		</fieldset>
 	</form>
+<div id="doc" class="yui-t3">
+        <div id="bd">
+                <div  class="yui-b" id="sourceContainer"></div>
+                <div  class="yui-b"  id="destContainer"></div>
+        </div>
+        <div id="ft">
+        </div>
 </div>
 
-<div id="doc" class="yui-t3"> 
-	<div id="bd">
-		<div  class="yui-b" id="sourceContainer"></div>
-		<div  class="yui-b"  id="destContainer"></div>
-	</div>
-	<div id="ft">
-	</div>
 </div>
 
 

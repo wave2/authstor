@@ -175,6 +175,18 @@ sub editUser : Regex('^user(\d+)/edit$') {
 }
 
 
+sub info : Regex('^user/info$') {
+        my ( $self, $c ) = @_;
+        my $json = JSON->new->utf8->space_after->encode({a => [1,2]});
+        my @users;
+        my $rs = $c->model('AuthStorDB::User')->search({active => 0});
+        while(my $user = $rs->next){
+                push(@users,[$user->user_id,$user->first_name,$user->last_name]);
+        }
+        $c->stash->{Users} = \@users;
+        $c->forward('AuthStor::View::JSON');
+}
+
 
 =head1 AUTHOR
 
