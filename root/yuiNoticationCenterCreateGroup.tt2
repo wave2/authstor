@@ -32,7 +32,9 @@
 					{key:'lname',label:'Last Name', sortable:true}
 				],
 				new YAHOO.util.DataSource(
-					[],
+					[
+						{}
+					],
 					{
 						responseType:YAHOO.util.DataSource.TYPE_JSARRAY,
 						responseSchema: {fields:['userID','fname','lname']}
@@ -52,30 +54,30 @@
 				var cells = YAHOO.util.Selector.query('.yui-dt-col-' + column.key,this.getTableEl());
 				YAHOO.util.Dom.addClass(cells,'hide');
 			});
+                       var sUrl = "[% base %]" + "user/info";
+                       var connectionCallback = {
+                                       success: function(o) {
+                                       var allData = [];
+                                       var usersInfo = eval("(" + o.responseText + ")");
+                                       //the User ID: usersInfo.Users[0][0]
+                                       //the User First Name usersInfo.Users[0][1]
+                                       //the User Last Name usersInfo.Users[0][2]
+                                       //the number of total users usersInfo.Users.length
+                                       var totalUsers=usersInfo.Users.length;
+                                       for (var i=0; i<totalUsers; i++) {
+                                               dtSource.addRow({
+                                                       userID:usersInfo.Users[i][0],
+                                                       fname:usersInfo.Users[i][1],
+                                                       lname:usersInfo.Users[i][2]
+                                               });
+                                       }
+                               },
+                               failure: function(o) {
+                                       alert("Invalid product data");
+                               }
+                       };
+                       var getXML = YAHOO.util.Connect.asyncRequest("GET", sUrl, connectionCallback);
 
-			var sUrl = "[% base %]" + "user/info";
-		        var connectionCallback = {
-       			        success: function(o) {
-                        		var allData = [];
-                        		var usersInfo = eval("(" + o.responseText + ")");
-                        		//the User ID: usersInfo.Users[0][0]
-					//the User First Name usersInfo.Users[0][1]
-					//the User Last Name usersInfo.Users[0][2]
-					//the number of total users usersInfo.Users.length
-					var totalUsers=usersInfo.Users.length;
-					for (var i=0; i<totalUsers; i++) {
-						dtSource.addRow({
-							userID:usersInfo.Users[i][0],
-							fname:usersInfo.Users[i][1],
-							lname:usersInfo.Users[i][2]
-						});
-					}
-                		},
-                		failure: function(o) {
-                        		alert("Invalid product data");
-                		}
-        		};
-        		var getXML = YAHOO.util.Connect.asyncRequest("GET", sUrl, connectionCallback);
 
 			// Create the table with all the users currently in the Notification group.
 			var dtDest = new DT(
