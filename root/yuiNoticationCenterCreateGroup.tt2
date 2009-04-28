@@ -247,6 +247,7 @@
 			    // The first drag and drop destination is where the messages are shown
 			    (new YAHOO.util.DDTarget(dtDest.getMsgTbodyEl()));
 			})();
+			dtSource.deleteRow(0);
 		}
 	});
 })();
