@@ -95,10 +95,6 @@ var tree;
         groupNode0.expand();
     }
 
-        //Add a window onload handler to build the tree when the load
-        //event fires.
-    YAHOO.util.Event.addListener(window, "load", treeInit);
-
 var oCurrentTextNode = null; 
 
 var deleteGroupDialog = new YAHOO.widget.SimpleDialog("deleteGroupDialog", {
@@ -322,6 +318,8 @@ function loadNodeData(node, fnLoadComplete)  {
         //asyncRequest method:
         YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 }
+
+treeInit();
 
 });
 
