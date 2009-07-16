@@ -10,7 +10,7 @@ AuthStor::Controller::Dashboard - Catalyst Controller
 
 =head1 DESCRIPTION
 
-Catalyst Controller.
+AuthStor Dashboard
 
 =head1 METHODS
 
@@ -35,6 +35,8 @@ sub index : Private {
     }
     $c->stash->{expandGroup} = 0;
     $c->stash->{group} = $c->model('AuthStorDB::AuthGroup')->single({ parent_id => 0 });
+    # Recent Changes
+    $c->stash->{recentChanges} = $c->model('AuthStorDB::Auth')->search({}, {order_by => { -desc => 'modified' }, rows => 5});
     # Tag Cloud
     my $cloud = HTML::TagCloud->new(levels=>5);
     my $tags = $c->model('AuthStorDB::AuthTag')->search({},
@@ -56,12 +58,11 @@ sub index : Private {
 
 =head1 AUTHOR
 
-Charlie &
+Alan Snelson
 
 =head1 LICENSE
 
-This library is free software, you can redistribute it and/or modify
-it under the same terms as Perl itself.
+See the file LICENSE for details.
 
 =cut
 

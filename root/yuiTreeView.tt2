@@ -61,10 +61,10 @@ YAHOO.util.Event.onDOMReady(function () {
     // Render the MenuBar instance
     oMenuBar.render('menubarDiv');
     
-//global variable to allow console inspection of tree:
-var tree;
+    //global variable to allow console inspection of tree:
+    var tree;
 
-   var oTextNodeMap = {};
+    var oTextNodeMap = {};
 
     //function to initialize the tree:
     function treeInit() {
@@ -74,7 +74,7 @@ var tree;
         //turn dynamic loading on for entire tree: 
         var myobj = { label: "", id:"" };
 
-    myobj = { id: 0, html: '<a href="[% base %]dashboard">AuthStor</a>', container: true };
+    myobj = { id: 0, html: '<a onclick="window.location.href=\'[% base %]dashboard\'" href="[% base %]dashboard">AuthStor</a>', container: true };
     var groupNode0 = new YAHOO.widget.HTMLNode(myobj, tree.getRoot(), false, false);
     groupNode0.contentStyle = "ygtvroot";
     groupNode0.depth = -1;
@@ -85,8 +85,7 @@ var tree;
         tree.subscribe("labelClick", function(node) { 
 	  if (node.data.container == true){
             window.location.href = "[% base %]group" + node.data.id;
-          }
-          if (node.data.container == false){
+          } else {
             window.location.href = "[% base %]auth" + node.data.id;
           }
         }); 

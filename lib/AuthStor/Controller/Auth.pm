@@ -546,7 +546,7 @@ sub updateserver : Regex('^auth(\d+)/updateserver$') {
 
 =head1 Author
 
-Charlie &
+Alan Snelson
 Raul S Lasluisa
 
 =head1 LICENSE

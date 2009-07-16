@@ -2,6 +2,7 @@
 <body class="yui-skin-sam">
 [% PROCESS yuiCommon.tt2 -%]
 [% PROCESS yuiTreeView.tt2 -%]
+[% PROCESS yuiDataTable.tt2 -%]
 [% PROCESS header.tt2 -%]
 <div id='container'>
 <div id='sidebar'>
@@ -18,6 +19,51 @@
       [% FOR role = c.user.roles %]<li>[% role %]</li>[% END %]
     </ul>
 <h2>Recent Changes</h2>
+<div id='recentChanges'>
+<table id='recentChangesTable'>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Username</th>
+      <th>URI</th>
+      <th>Description</th>
+      <th>Modified</th>
+    </tr>
+  </thead>
+  <tbody>
+    [% WHILE (recentChange=recentChanges.next) -%]
+  <tr>
+    <td class='searchRow'><a href='[% base %]auth[% recentChange.auth_id %]'>[% recentChange.name %]</a></td>
+    <td class='searchRow'>[% recentChange.username %]</td>
+    <td class='searchRow'>[% recentChange.uri %]</td>
+    <td class='searchRow'>[% recentChange.description %]</td>
+    <td class='searchRow'>[% recentChange.modified %]</td>
+  </tr>
+    [% END %]
+  </tbody>
+</table>
+</div>
+<script type='text/javascript'>
+  var dataSource = new YAHOO.util.DataSource(YAHOO.util.Dom.get("recentChangesTable"));
+  dataSource.responseType = YAHOO.util.DataSource.TYPE_HTMLTABLE;
+  dataSource.responseSchema = {
+    fields: [{key:"Name"},{key:"Username"},{key:"URI"},{key:"Description"},{key:"Modified"}]
+  };
+
+  var columnDefs = [
+    {key:"Name"},
+    {key:"Username"},
+    {key:"URI"},
+    {key:"Description"},
+    {key:"Modified"}
+  ];
+
+  var oConfigs = {
+    initialRequest: "results=504"
+  };
+
+  var dataTable = new YAHOO.widget.DataTable("recentChanges", columnDefs, dataSource, oConfigs);
+</script>
 <h2>Tag Cloud</h2>
 [% tag_cloud %]
 </div>
