@@ -233,6 +233,9 @@ sub edit : Regex('^auth(\d+)/edit$') {
       #Update the Auth
       my $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { name => $c->request->parameters->{name}, uri => $c->request->parameters->{uri}, username => $c->request->parameters->{username}, password => $encryptedtext, group_id => $c->request->parameters->{group_id}, notes => $c->request->parameters->{notes} });
 
+      #Update Auth History
+      my $authHistory = $c->model('AuthStorDB::AuthHistory')->create( { auth_id => $auth_id, name => $c->request->parameters->{name}, uri => $c->request->parameters->{uri}, username => $c->request->parameters->{username}, password => $encryptedtext, notes => $c->request->parameters->{notes} });
+
 
       #New file?
       if ( my $upload = $c->request->upload('new_att') ) {
@@ -318,6 +321,33 @@ sub edit : Regex('^auth(\d+)/edit$') {
     $c->forward('AuthStor::View::TT');
 }
 
+sub history : Regex('^auth(\d+)/history$') {
+    my ( $self, $c ) = @_;
+
+    my $auth_id  = $c->request->snippets->[0];
+    my $history = $c->model('AuthStorDB::AuthHistory')->search({auth_id => $auth_id});
+
+    my (@xaxis, @yaxis);
+
+    while (my $authRevision = $history->next) {
+      push @xaxis, 0;
+      push @yaxis, 1;
+    }
+
+    $c->stash->{title}->{text} = 'Auth History';
+    $c->stash->{title}->{style} = '{font-size: 20px; color:#535050; font-family: Verdana; text-align: center;}';
+    $c->stash->{y_legend}->{text} = 'Time';
+    $c->stash->{y_legend}->{style} = '{color: #535050; font-size: 12px;}';
+    $c->stash->{x_legend}->{text} = 'Date';
+    $c->stash->{x_legend}->{style} = '{color: #535050; font-size: 12px;}';
+    $c->stash->{elements}->[0]->{type} = 'line';
+    $c->stash->{elements}->[0]->{colour} = '#8ac73b';
+    $c->stash->{elements}->[0]->{values} = \@xaxis;
+
+    $c->forward('AuthStor::View::JSON');
+}
+
+
 sub add : Local {
     my ( $self, $c ) = @_;
 
@@ -358,6 +388,9 @@ sub add : Local {
        my $timeStamp=$year . '-' . $mon . '-' . $mday . ' ' . $hour . ':' . $min . ':' . $sec;
 
        my $auth = $c->model('AuthStorDB::Auth')->create( { name => $c->request->parameters->{name}, uri => $c->request->parameters->{uri}, username => $c->request->parameters->{username}, password => $encryptedtext, group_id => $c->request->parameters->{group_id}, notes => $c->request->parameters->{notes}, created => $timeStamp });
+
+       #Update Auth History
+       my $authHistory = $c->model('AuthStorDB::AuthHistory')->create( { auth_id => $auth->auth_id, name => $c->request->parameters->{name}, uri => $c->request->parameters->{uri}, username => $c->request->parameters->{username}, password => $encryptedtext, notes => $c->request->parameters->{notes} });
 
        #Add new tags
        foreach my $formtag (split('\s+',$results->valid('tags'))){

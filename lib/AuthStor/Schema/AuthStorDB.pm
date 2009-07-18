@@ -6,7 +6,7 @@ use warnings;
 use base 'DBIx::Class::Schema';
 
 #__PACKAGE__->load_classes;
-__PACKAGE__->load_classes(qw/Auth AuthTag Attachment AuthAtt AuthGroup Tag User UserRole UserTag Role NotifyGroups/);
+__PACKAGE__->load_classes(qw/Auth AuthTag Attachment AuthAtt AuthHistory AuthGroup Tag User UserRole UserTag Role NotifyGroups/);
 
 
 

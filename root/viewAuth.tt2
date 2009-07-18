@@ -48,6 +48,7 @@
 <tr><td class='attachments'><a href="[% base %]auth[% auth_view.auth_id %]/att[% attachment.get_column('att_id') %]">[% attachment.get_column('filename') %]</a></td></tr>
 [% END -%]
 </table>
+<h2>History</h2>
 <hr />
 <input type='button' id="editButton" name="editButton" value="Edit">
 <input type='button' id="deleteButton" name="deleteButton" value="Delete">
