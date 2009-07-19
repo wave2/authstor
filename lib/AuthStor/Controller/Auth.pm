@@ -123,8 +123,10 @@ sub auth : Regex('^auth(\d+)$') {
     $c->stash->{tag_cloud} =  $cloud->html(50);
 
     #Treeview Root Nodes
-    $c->stash->{parents} = getParents($c, $group->parent_id);
-    $c->stash->{group} = $group;
+    if ($group){
+      $c->stash->{parents} = getParents($c, $group->parent_id);
+      $c->stash->{group} = $group;
+    }
 
     #Attachments
     $c->stash->{attachments} = $c->model('AuthStorDB::AuthAtt')->search({ auth_id => $auth_id },
@@ -132,6 +134,15 @@ sub auth : Regex('^auth(\d+)$') {
       join => 'attachment',
       select => [ 'attachment.att_id', 'attachment.filename' ],
       as => [qw/att_id filename/],
+    });
+
+    #History
+    $c->stash->{authHistory} = $c->model('AuthStorDB::AuthHistory')->search({auth_id => $auth_id}, 
+    {
+      join => 'user',
+      order_by => { -asc => 'modified' },
+      '+select' => ['user.first_name', 'user.last_name'],
+      '+as' => [qw/first_name last_name/]
     });
 
     $c->stash->{title} = 'Auth &rsaquo; '.$c->stash->{auth_view}->name;
@@ -234,7 +245,7 @@ sub edit : Regex('^auth(\d+)/edit$') {
       my $auth = $c->model('AuthStorDB::Auth')->find($auth_id)->update( { name => $c->request->parameters->{name}, uri => $c->request->parameters->{uri}, username => $c->request->parameters->{username}, password => $encryptedtext, group_id => $c->request->parameters->{group_id}, notes => $c->request->parameters->{notes} });
 
       #Update Auth History
-      my $authHistory = $c->model('AuthStorDB::AuthHistory')->create( { auth_id => $auth_id, name => $c->request->parameters->{name}, uri => $c->request->parameters->{uri}, username => $c->request->parameters->{username}, password => $encryptedtext, notes => $c->request->parameters->{notes} });
+      my $authHistory = $c->model('AuthStorDB::AuthHistory')->create( { auth_id => $auth_id, name => $c->request->parameters->{name}, uri => $c->request->parameters->{uri}, username => $c->request->parameters->{username}, password => $encryptedtext, notes => $c->request->parameters->{notes}, user_id => $c->user()->id, action => 1 });
 
 
       #New file?
@@ -390,7 +401,7 @@ sub add : Local {
        my $auth = $c->model('AuthStorDB::Auth')->create( { name => $c->request->parameters->{name}, uri => $c->request->parameters->{uri}, username => $c->request->parameters->{username}, password => $encryptedtext, group_id => $c->request->parameters->{group_id}, notes => $c->request->parameters->{notes}, created => $timeStamp });
 
        #Update Auth History
-       my $authHistory = $c->model('AuthStorDB::AuthHistory')->create( { auth_id => $auth->auth_id, name => $c->request->parameters->{name}, uri => $c->request->parameters->{uri}, username => $c->request->parameters->{username}, password => $encryptedtext, notes => $c->request->parameters->{notes} });
+       my $authHistory = $c->model('AuthStorDB::AuthHistory')->create( { auth_id => $auth->auth_id, name => $c->request->parameters->{name}, uri => $c->request->parameters->{uri}, username => $c->request->parameters->{username}, password => $encryptedtext, notes => $c->request->parameters->{notes}, user_id => $c->user()->id, action => 0 });
 
        #Add new tags
        foreach my $formtag (split('\s+',$results->valid('tags'))){

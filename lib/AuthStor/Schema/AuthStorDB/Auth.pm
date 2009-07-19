@@ -8,7 +8,7 @@ __PACKAGE__->add_columns(qw/auth_id name username password uri created modified 
 __PACKAGE__->set_primary_key('auth_id');
 __PACKAGE__->has_many(map_auth_tag => 'AuthStor::Schema::AuthStorDB::AuthTag', 'auth_id');
 __PACKAGE__->has_many(map_auth_attachment => 'AuthStor::Schema::AuthStorDB::AuthAtt', 'auth_id');
-__PACKAGE__->has_many(map_auth_attachment => 'AuthStor::Schema::AuthStorDB::AuthHistory', 'auth_id');
+__PACKAGE__->has_many(map_auth_history => 'AuthStor::Schema::AuthStorDB::AuthHistory', 'auth_id');
 
 =head1 NAME
 

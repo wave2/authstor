@@ -18,12 +18,17 @@
 <label for="group_id">Group:</label>
 <select id='group_id' name='group_id'>
 [% WHILE (parent=groups.next) -%]
-[% IF (group.group_id == parent.group_id) %]
+[% IF (group) -%]
+<option value="0">AuthStor</option>
+[% ELSE -%]
+<option selected value="0">AuthStor</option>
+[% END -%]
+[% IF (group.group_id == parent.group_id) -%]
 <option selected value="[% group.group_id %]">[% group.name %]</option>
-[% ELSE %]
+[% ELSE -%]
 <option value="[% parent.group_id %]">[% parent.name %]</option>
-[% END %]
-[% END %]
+[% END -%]
+[% END -%]
 </select>
 </div>
 <div class="required">

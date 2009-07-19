@@ -59,12 +59,11 @@ sub index : Private {
 
 =head1 AUTHOR
 
-Charlie &
+Alan Snelson
 
 =head1 LICENSE
 
-This library is free software, you can redistribute it and/or modify
-it under the same terms as Perl itself.
+See the file LICENSE for details.
 
 =cut
 

@@ -226,6 +226,40 @@ textarea, input, select {
   margin-left: 245px;
 }
 
+#authHistory {
+  margin-left: 10px;
+  margin-top: 0px;
+}
+
+#authHistory table {
+  margin-top: 0px;
+  border-collapse: collapse;
+}
+
+#authHistory .histHeader {
+  font: 1.1em Tahoma, sans-serif;
+  padding-top: 4px;
+  padding-bottom: 2px;
+}
+
+#authHistory .histTime {
+  background: #E5ECF9;
+  color: #666666;
+  font: 0.9em Tahoma, sans-serif;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+#authHistory .histAction {
+  color: #CAD4D9;
+  font: 0.9em Tahoma, sans-serif;
+  padding-left: 8px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
 #content h1 {
     border-bottom: 2px solid #fff;
     color: #ffffff;
@@ -237,6 +271,13 @@ textarea, input, select {
     border-bottom: 2px solid #fff;
     color: #ffffff;
     font: 1.4em Tahoma, sans-serif;
+  margin-bottom: 4px;
+}
+
+#content h3 {
+    border-bottom: 1px solid #fff;
+    color: #ffffff;
+    font: 1.1em Tahoma, sans-serif;
 }
 
 #content p {

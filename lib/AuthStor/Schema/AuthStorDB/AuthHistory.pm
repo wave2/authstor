@@ -4,9 +4,10 @@ use base qw/DBIx::Class/;
 
 __PACKAGE__->load_components(qw/PK::Auto Core/);
 __PACKAGE__->table('auth_history');
-__PACKAGE__->add_columns(qw/auth_id name username password uri modified expires description notes/);
-__PACKAGE__->set_primary_key('auth_id');
+__PACKAGE__->add_columns(qw/auth_id name username password uri modified expires description notes user_id action/);
+__PACKAGE__->set_primary_key(qw/auth_id modified/);
 __PACKAGE__->belongs_to(auth => 'AuthStor::Schema::AuthStorDB::Auth', 'auth_id');
+__PACKAGE__->belongs_to(user => 'AuthStor::Schema::AuthStorDB::User', 'user_id');
 
 
 =head1 NAME

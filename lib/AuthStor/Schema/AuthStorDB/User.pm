@@ -7,6 +7,7 @@ __PACKAGE__->table('users');
 __PACKAGE__->add_columns(qw/user_id username password email_address first_name last_name mobile active description/);
 __PACKAGE__->set_primary_key('user_id');
 __PACKAGE__->has_many(map_user_role => 'AuthStor::Schema::AuthStorDB::UserRole', 'user_id');
+__PACKAGE__->has_many(map_auth_history => 'AuthStor::Schema::AuthStorDB::AuthHistory', 'user_id');
 __PACKAGE__->many_to_many(roles => 'map_user_role', 'role');
 
 =head1 NAME

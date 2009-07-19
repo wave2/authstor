@@ -78,7 +78,7 @@ END
       File::Temp::cleanup();
     }
 
-      $c->stash->{title} = 'Key';
+      $c->stash->{title} = 'Key &rsaquo; Generate';
       $c->stash->{template} = 'genKey.tt2';
       $c->forward('AuthStor::View::TT');
 }

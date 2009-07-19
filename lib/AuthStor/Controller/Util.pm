@@ -53,7 +53,7 @@ sub end : ActionClass('RenderView') {}
 
 =head1 AUTHOR
 
-Charlie &
+Alan Snelson
 
 =head1 LICENSE
 

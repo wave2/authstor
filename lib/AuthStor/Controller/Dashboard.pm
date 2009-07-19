@@ -36,7 +36,7 @@ sub index : Private {
     $c->stash->{expandGroup} = 0;
     $c->stash->{group} = $c->model('AuthStorDB::AuthGroup')->single({ parent_id => 0 });
     # Recent Changes
-    $c->stash->{recentChanges} = $c->model('AuthStorDB::Auth')->search({}, {order_by => { -desc => 'modified' }, rows => 5});
+    $c->stash->{recentChanges} = $c->model('AuthStorDB::Auth')->search({status => 1}, {order_by => { -desc => 'modified' }, rows => 5});
     # Tag Cloud
     my $cloud = HTML::TagCloud->new(levels=>5);
     my $tags = $c->model('AuthStorDB::AuthTag')->search({},

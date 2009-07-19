@@ -61,6 +61,30 @@ CREATE TABLE `auth_atts` (
 SET character_set_client = @saved_cs_client;
 
 --
+-- Table structure for table `auth_history`
+--
+
+DROP TABLE IF EXISTS `auth_history`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `auth_history` (
+  `auth_id` int(10) unsigned NOT NULL,
+  `username` varchar(255) default NULL,
+  `password` blob,
+  `uri` varchar(255) default NULL,
+  `modified` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `expires` timestamp NOT NULL default '0000-00-00 00:00:00',
+  `description` text,
+  `name` varchar(255) default NULL,
+  `notes` text,
+  `user_id` int(10) unsigned NOT NULL,
+  `action` tinyint(3) unsigned NOT NULL,
+  PRIMARY KEY  USING BTREE (`auth_id`,`modified`),
+  CONSTRAINT `auth_history_ibfk_1` FOREIGN KEY (`auth_id`) REFERENCES `auths` (`auth_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 
+SET character_set_client = @saved_cs_client;
+
+--
 -- Table structure for table `auth_tags`
 --
 

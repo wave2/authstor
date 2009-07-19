@@ -184,8 +184,7 @@ function hidePassword(pwField, baseUrl)
 {
   var genCallBack = {success : function (o) {
     var password = YAHOO.lang.JSON.parse(o.responseText);
-    pwField.value = "**********";
-    runPassword(password.randpasswd, 'password');},
+    pwField.firstChild.nodeValue = "Password: **********";},
   };
   YAHOO.util.Connect.asyncRequest('GET',baseUrl + '/util/randpasswd', genCallBack);
 }
@@ -194,8 +193,7 @@ function showPassword(pwField, baseUrl, pass)
 {
   var genCallBack = {success : function (o) {
     var password = YAHOO.lang.JSON.parse(o.responseText);
-    pwField.value =pass;
-    runPassword(password.randpasswd, 'password');},
+    pwField.firstChild.nodeValue = "Password: " + pass;},
   };
   YAHOO.util.Connect.asyncRequest('GET',baseUrl + '/util/randpasswd', genCallBack);
 }

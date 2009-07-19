@@ -1,3 +1,4 @@
+[% USE date -%]
 [% PROCESS head.tt2 -%]
 <body class='yui-skin-sam'>
 <script type="text/javascript" src="/static/pwstrength.js"></script>
@@ -12,29 +13,20 @@
 </div>
 <div id='content'>
 <h1>[% auth_view.name %]</h1>
+[% IF auth_view.updating_server %]
+        <center><b><font size="5" color="red"> Server is currently updating.</font></b></center>
+[% ELSE %]
+        [% IF auth_view.failed_attempt %]
+                <center><b><font size="5" color="red"> Failed to update last time.</font></b></center>
+        [% END %]
+[% END %]
 <p>URI: [% auth_view.uri %]</p>
 <p>Username: [% auth_view.username %]</p>
 <p>Last Modified: [% auth_view.modified %]</p>
 <p>Last Server Update: [% auth_view.last_server_update %]</p>
-
+<p id="password">Password: **********</p>
 <form id='editAuthForm' action="[% post_uri %]" method="post" enctype="multipart/form-data">
-<fieldset>
-<div class='optional'>
-<label for='password'>Password:</label>
-<input type="text" name="password" id="password" size='22' maxlength='100' value='**********'  onkeyup="runPassword(this.value, 'password');" /><button onclick="hidePassword(document.forms['editAuthForm'].password, '[% base %]');" id="genPassButton" type="button" style="font-size:10pt">Hide Password</button><button onclick="showPassword(document.forms['editAuthForm'].password, '[% base %]', '[% auth_pass %]');" id="genPassButton" type="button" style="font-size:10pt">Show Password</button>
-</fieldset>
-
-[% IF auth_view.updating_server %]
-	<center><b><font size="5" color="red"> Server is currently updating.</font></b></center>
-	<input type='button' id="updateServerButton" name="updateServerButton" value="Update Server">
-[% ELSE %]
-	[% IF auth_view.failed_attempt %]
-		<center><b><font size="5" color="red"> Failed to update last time.</font></b></center>
-		<input type='button' id="updateServerButton" name="updateServerButton" value="Update Server">
-	[% ELSE %]
-		<input type='button' id="updateServerButton" name="updateServerButton" value="Update Server">
-	[% END %]
-[% END %]
+<button onclick="hidePassword(document.getElementById('password'), '[% base %]');" id="genPassButton" type="button" style="font-size:10pt">Hide Password</button><button onclick="showPassword(document.getElementById('password'), '[% base %]', '[% auth_pass %]');" id="genPassButton" type="button" style="font-size:10pt">Show Password</button>
 
 [% IF tag_cloud %]
 <h2>Tags</h2>
@@ -49,15 +41,28 @@
 [% END -%]
 </table>
 <h2>History</h2>
+<div id="authHistory">
+[% currentDate = '' -%]
+<table>
+[% WHILE (history=authHistory.next) -%]
+[% IF (currentDate != date.format(history.get_column('modified'), '%d:%m:%Y')) -%]
+<tr><td class="histHeader" colspan=2>[% date.format(history.get_column('modified'), '%b %d, %Y') -%]</td></tr>
+[% END -%]
+<tr><td class="histTime">[% date.format(history.get_column('modified'), '%I:%M%p') FILTER lower -%]</td><td class="histAction">[% SWITCH history.get_column('action') -%][% CASE 0 -%]Auth Created[% CASE 1 -%]Auth Modified[% END -%] by [% history.get_column('first_name') -%] [% history.get_column('last_name') -%]</td></tr>
+[% currentDate = date.format(history.get_column('modified'), '%d:%m:%Y') -%]
+[% END -%]
+</table>
+</div>
 <hr />
 <input type='button' id="editButton" name="editButton" value="Edit">
 <input type='button' id="deleteButton" name="deleteButton" value="Delete">
+<input type='button' id="updateServerButton" name="updateServerButton" value="Update Server">
 <script type='text/javascript'>
   var updateServerButton = new YAHOO.widget.Button("updateServerButton");
-  updateServerButton.addListener("click",function(){window.location.href = "[% base %]/auth[% auth_view.auth_id %]/updateserver"});
+  updateServerButton.addListener("click",function(){window.location.href = "[% base %]auth[% auth_view.auth_id %]/updateserver"});
 
   var editButton = new YAHOO.widget.Button("editButton");
-  editButton.addListener("click",function(){window.location.href = "[% base %]/auth[% auth_view.auth_id %]/edit"});
+  editButton.addListener("click",function(){window.location.href = "[% base %]auth[% auth_view.auth_id %]/edit"});
   var deleteButton = new YAHOO.widget.Button("deleteButton"); 
 
   var deleteDialog = new YAHOO.widget.SimpleDialog("deleteDialog", { 
