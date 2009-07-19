@@ -25,8 +25,16 @@
 <p>Last Modified: [% auth_view.modified %]</p>
 <p>Last Server Update: [% auth_view.last_server_update %]</p>
 <p id="password">Password: **********</p>
-<form id='editAuthForm' action="[% post_uri %]" method="post" enctype="multipart/form-data">
+<script type="text/javascript" src="[% base %]static/zeroclipboard/ZeroClipboard.js"></script>
+<button id="copyPassButton" type="button" style="font-size:10pt">Copy Password</button>
 <button onclick="hidePassword(document.getElementById('password'), '[% base %]');" id="genPassButton" type="button" style="font-size:10pt">Hide Password</button><button onclick="showPassword(document.getElementById('password'), '[% base %]', '[% auth_pass %]');" id="genPassButton" type="button" style="font-size:10pt">Show Password</button>
+<script language="JavaScript">
+  ZeroClipboard.setMoviePath( '[% base %]static/zeroclipboard/ZeroClipboard.swf' );
+  var clip = new ZeroClipboard.Client();
+  clip.setText( '[% auth_pass %]' );
+  clip.glue( 'copyPassButton' );
+</script>
+
 
 [% IF tag_cloud %]
 <h2>Tags</h2>
