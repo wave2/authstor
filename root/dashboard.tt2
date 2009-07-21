@@ -38,6 +38,7 @@
     <td class='searchRow'>[% recentChange.uri %]</td>
     <td class='searchRow'>[% recentChange.description %]</td>
     <td class='searchRow'>[% recentChange.modified %]</td>
+    <td class='searchRow'>[% recentChange.get_column('first_name') %] [% recentChange.get_column('last_name') %]</td>
   </tr>
     [% END %]
   </tbody>
@@ -47,7 +48,7 @@
   var dataSource = new YAHOO.util.DataSource(YAHOO.util.Dom.get("recentChangesTable"));
   dataSource.responseType = YAHOO.util.DataSource.TYPE_HTMLTABLE;
   dataSource.responseSchema = {
-    fields: [{key:"Name"},{key:"Username"},{key:"URI"},{key:"Description"},{key:"Modified"}]
+    fields: [{key:"Name"},{key:"Username"},{key:"URI"},{key:"Description"},{key:"Modified"},{key:"User"}]
   };
 
   var columnDefs = [
@@ -55,7 +56,8 @@
     {key:"Username"},
     {key:"URI"},
     {key:"Description"},
-    {key:"Modified"}
+    {key:"Modified"},
+    {key:"User"}
   ];
 
   var oConfigs = {

@@ -29,10 +29,12 @@
 <button id="copyPassButton" type="button" style="font-size:10pt">Copy Password</button>
 <button onclick="hidePassword(document.getElementById('password'), '[% base %]');" id="genPassButton" type="button" style="font-size:10pt">Hide Password</button><button onclick="showPassword(document.getElementById('password'), '[% base %]', '[% auth_pass %]');" id="genPassButton" type="button" style="font-size:10pt">Show Password</button>
 <script language="JavaScript">
+YAHOO.util.Event.onDOMReady(function () {
   ZeroClipboard.setMoviePath( '[% base %]static/zeroclipboard/ZeroClipboard.swf' );
   var clip = new ZeroClipboard.Client();
   clip.setText( '[% auth_pass %]' );
   clip.glue( 'copyPassButton' );
+});
 </script>
 
 
