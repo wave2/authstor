@@ -1,9 +1,9 @@
 package AuthStor;
 
-use strict;
-use warnings;
+use Moose;
+use namespace::autoclean;
 
-use Catalyst::Runtime '5.70';
+use Catalyst::Runtime '5.80';
 
 # Use the Log4perl Catalyst component
 use Catalyst::Log::Log4perl;
@@ -20,31 +20,22 @@ use Catalyst qw/
     Session::Store::FastMmap
     Session::State::Cookie
     /;
+extends 'Catalyst';
 
 our $VERSION = '1.0';
 
-# Configure the application. 
-#
-# Note that settings in authstor.yml (or other external
-# configuration file that you set up manually) take precedence
-# over this when using ConfigLoader. Thus configuration
-# details given here can function as a default configuration,
-# with a external configuration file acting as an override for
-# local deployment.
-
 __PACKAGE__->config( name => 'AuthStor' );
+
+# Start the application
+__PACKAGE__->setup;
 
 # Create a Log4perl object
 __PACKAGE__->log( Catalyst::Log::Log4perl->new(
     __PACKAGE__->path_to('Log4perl.conf')->stringify ) );
 
-# Start the application
-__PACKAGE__->setup;
-
-
 =head1 NAME
 
-AuthStor - Catalyst based application
+AuthStor - Web Based Password Management
 
 =head1 SYNOPSIS
 
@@ -60,12 +51,11 @@ L<AuthStor::Controller::Root>, L<Catalyst>
 
 =head1 AUTHOR
 
-Charlie &
+Alan Snelson
 
 =head1 LICENSE
 
-This library is free software, you can redistribute it and/or modify
-it under the same terms as Perl itself.
+See the file LICENSE for details.
 
 =cut
 
